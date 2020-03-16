@@ -18,6 +18,7 @@ classifying_properties = [
     'P373',  # Commons category
     'P910',  # Topic's main category
 ]
+
 with open('external_idefs.json', 'r') as f:
     external_identifiers = json.loads(f.read())
 

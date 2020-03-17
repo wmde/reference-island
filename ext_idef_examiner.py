@@ -53,7 +53,7 @@ def check_cases(usecases, formatter_urls_for_id):
         value = case['value']['value']
         url = formatter_urls_for_id[0].replace('$1', value)
         try:
-            r = requests.get(url)
+            r = requests.get(url, timeout=30)
         except:
             continue
         if r.status_code == 200:

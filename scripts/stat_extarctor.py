@@ -1,17 +1,15 @@
-import json
 import os
 import sys
 from collections import OrderedDict
 
 from wikidatarefisland.config import BLACKLISTED_ITEMS, CLASSIFYING_PROPERTIES
 from wikidatarefisland.dumpreader import DumpReader
+from wikidatarefisland.storage import Storage
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-with open(dir_path + '/../data/external_idefs.json', 'r') as f:
-    external_identifiers = json.loads(f.read())
+storage = Storage.newFromScript(os.path.realpath(__file__))
 
-with open(dir_path + '/../data/whitelisted_ext_idefs.json', 'r') as f:
-    whitelisted_ext_idefs = json.loads(f.read())
+external_identifiers = storage.get('external_idefs.json')
+whitelisted_ext_idefs = storage.get('whitelisted_ext_idefs.json')
 
 
 def remove_blacklisted_items(p31):
@@ -78,13 +76,11 @@ for item in dump_reader.read_items():
     if remove_blacklisted_items(item['claims'].get('P31')):
         continue
     if int(item['id'][1:]) % 1000 == 0:
-        with open(dir_path + '/../data/extracted_stats.json', 'w') as f:
-            ordered_stats = OrderedDict(
-                sorted(ext_idefs_stats.items(), key=lambda t: t[1],
-                       reverse=True)
-            )
-            res['detailed_stats'] = ordered_stats
-            f.write(json.dumps(res))
+        ordered_stats = OrderedDict(
+            sorted(ext_idefs_stats.items(), key=lambda t: t[1],
+                   reverse=True))
+        res['detailed_stats'] = ordered_stats
+        storage.store('extracted_stats.json', res)
         print(item['id'])
     (total, unrefed, external_idefs, ext_idefs_stats_in_item) = handle_statements(item['claims'])
     if unrefed == 0:

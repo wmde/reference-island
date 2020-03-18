@@ -1,9 +1,12 @@
-import json
+import os
+
+from wikidatarefisland.storage import Storage
+
+storage = Storage.newFromScript(os.path.realpath(__file__))
 
 
 def main():
-    with open('../data/ext_idef_check_result.json', 'r') as f:
-        data = json.loads(f.read())
+    data = storage.get('ext_idef_check_result.json')
     print('Total: ', len(data))
     goods = []
     schemas = []
@@ -15,8 +18,7 @@ def main():
     print('Good: ', len(goods))
     print('Schemas: ', len(schemas))
 
-    with open('../data/whitelisted_ext_idefs.json', 'w') as f:
-        f.write(json.dumps(schemas))
+    storage.store('whitelisted_ext_idefs.json', schemas)
 
 
 if __name__ == '__main__':

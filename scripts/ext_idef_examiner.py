@@ -1,15 +1,15 @@
-import json
 import os
 
 import requests
 
 from wikidatarefisland.config import BLACKLISTED_EXTERNAL_IDENTIFIERS
 from wikidatarefisland.external_identifier import ExternalIdentifier
+from wikidatarefisland.storage import Storage
 from wikidatarefisland.wdqs_reader import WdqsReader
 
 wdqs_reader = WdqsReader()
 external_identifier_tools = ExternalIdentifier()
-dir_path = os.path.dirname(os.path.realpath(__file__))
+storage = Storage.newFromScript(os.path.realpath(__file__))
 
 
 def get_usecases(pid):
@@ -43,14 +43,12 @@ def check_cases(usecases, formatter_urls_for_id):
     return total_number, good_responses, schema_org_responses
 
 
-with open(dir_path + '/../data/external_idefs.json', 'r') as f:
-    external_identifiers = json.loads(f.read())
-
+external_identifiers = storage.get('external_idefs.json')
 try:
-    with open(dir_path + '/../data/ext_idef_check_result.json', 'r') as f:
-        final_results = json.loads(f.read())
+    final_results = storage.get('ext_idef_check_result.json')
 except:
     final_results = {}
+
 for i in external_identifiers:
     if i in final_results or i in BLACKLISTED_EXTERNAL_IDENTIFIERS:
         continue
@@ -61,5 +59,4 @@ for i in external_identifiers:
     print('Checking {0}'.format(i))
     usecases = get_usecases(i)
     final_results[i] = check_cases(usecases, formatter_url)
-    with open(dir_path + '/../data/ext_idef_check_result.json', 'w') as f:
-        f.write(json.dumps(final_results))
+    storage.store('ext_idef_check_result.json', final_results)

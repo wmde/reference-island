@@ -10,7 +10,7 @@ blacklisted_properties = [
 
 
 def get_sparql_data(query):
-    user_agent = "github.com/Ladsgroup/reference-island Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
+    user_agent = "github.com/wmde/reference-island Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
     sparql = SPARQLWrapper('https://query.wikidata.org/sparql', agent=user_agent)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
@@ -63,12 +63,12 @@ def check_cases(usecases, formatter_urls_for_id):
     return total_number, good_responses, schema_org_responses
 
 
-with open('external_idefs.json', 'r') as f:
+with open('../data/external_idefs.json', 'r') as f:
     external_identifiers = json.loads(f.read())
 
 formatter_urls = get_formatter_urls()
 try:
-    with open('ext_idef_check_result.json', 'r') as f:
+    with open('../data/ext_idef_check_result.json', 'r') as f:
         final_results = json.loads(f.read())
 except:
     final_results = {}
@@ -81,5 +81,5 @@ for i in external_identifiers:
     print('Checking {0}'.format(i))
     usecases = get_usecases(i)
     final_results[i] = check_cases(usecases, formatter_urls[i])
-    with open('ext_idef_check_result.json', 'w') as f:
+    with open('../data/ext_idef_check_result.json', 'w') as f:
         f.write(json.dumps(final_results))

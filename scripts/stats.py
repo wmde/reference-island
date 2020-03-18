@@ -18,5 +18,6 @@ def main():
     with open('../data/whitelisted_ext_idefs.json', 'w') as f:
         f.write(json.dumps(schemas))
 
+
 if __name__ == '__main__':
     main()

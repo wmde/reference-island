@@ -67,8 +67,14 @@ with open('external_idefs.json', 'r') as f:
     external_identifiers = json.loads(f.read())
 
 formatter_urls = get_formatter_urls()
-final_results = {}
+try:
+    with open('ext_idef_check_result.json', 'r') as f:
+        final_results = json.loads(f.read())
+except:
+    final_results = {}
 for i in external_identifiers:
+    if i in final_results:
+        continue
     if i not in formatter_urls:
         print('{0} does not have a formatter'.format(i))
         continue

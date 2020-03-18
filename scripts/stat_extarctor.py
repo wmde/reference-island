@@ -3,7 +3,7 @@ import sys
 from collections import OrderedDict
 
 from wikidatarefisland.config import BLACKLISTED_ITEMS, CLASSIFYING_PROPERTIES
-from wikidatarefisland.dumpreader import DumpReader
+from wikidatarefisland.dump_reader import DumpReader
 from wikidatarefisland.storage import Storage
 
 storage = Storage.newFromScript(os.path.realpath(__file__))

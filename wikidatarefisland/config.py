@@ -9,7 +9,8 @@ BLACKLISTED_ITEMS = [
     'Q13406463',  # Wikimedia list
 ]
 BLACKLISTED_EXTERNAL_IDENTIFIERS = [
-    'P646'  # Freebase
+    'P646',  # Freebase
+    'P345',  # IMDb
 ]
 CLASSIFYING_PROPERTIES = [
     'P31',

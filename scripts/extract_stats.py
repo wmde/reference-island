@@ -5,6 +5,7 @@ from collections import OrderedDict
 from wikidatarefisland.config import BLACKLISTED_ITEMS, CLASSIFYING_PROPERTIES
 from wikidatarefisland.dump_reader import DumpReader
 from wikidatarefisland.storage import Storage
+from wikidatarefisland.item import Item
 
 storage = Storage.newFromScript(os.path.realpath(__file__))
 
@@ -12,45 +13,26 @@ external_identifiers = storage.get('external_idefs.json')
 whitelisted_ext_idefs = storage.get('whitelisted_ext_idefs.json')
 
 
-def remove_blacklisted_items(p31):
-    if not p31:
-        return False
-    for claim in p31:
-        try:
-            pid = claim['mainsnak']['datavalue']['value'].get('id')
-        except:
-            continue
-        if pid in BLACKLISTED_ITEMS:
-            return True
-    return False
-
-
-def handle_statements(claims):
+def inspect_statements(item):
     unrefed_statements = 0
     statements_that_should_have_ref = 0
     ex_idefs = 0
     ext_idefs_stats = {}
-    for pid in claims:
+    for pid in item.getClaims():
         if pid in CLASSIFYING_PROPERTIES:
             continue
         if pid in whitelisted_ext_idefs:
-            ex_idefs += len(claims[pid])
-            ext_idefs_stats[pid] = len(claims[pid])
+            no_claims = len(item.getPropertyClaims(pid))
+            ex_idefs += no_claims
+            ext_idefs_stats[pid] = no_claims
             continue
         if pid in external_identifiers:
             continue
-        for claim in claims[pid]:
+        for claim in item.getPropertyClaims(pid):
             statements_that_should_have_ref += 1
-            if not claim.get('references'):
+            if not claim.hasValidReference():
                 unrefed_statements += 1
                 continue
-            isAllRefsBS = True
-            for ref in claim['references']:
-                if 'P143' in ref['snaks'] or 'P4656' in ref['snaks']:
-                    continue
-                isAllRefsBS = False
-            if isAllRefsBS:
-                unrefed_statements += 1
 
     return (statements_that_should_have_ref, unrefed_statements, ex_idefs, ext_idefs_stats)
 
@@ -68,21 +50,22 @@ res = {
     'detailed_stats': 0,
 }
 ext_idefs_stats = {}
-
-# /mnt/data/xmldatadumps/public/wikidatawiki/entities/latest-all.json.gz
 dump_reader = DumpReader(sys.argv[1])
-for item in dump_reader.read_items():
+for item_serialization in dump_reader.read_items():
     res['items_checked'] += 1
-    if remove_blacklisted_items(item['claims'].get('P31')):
+    item_id = item_serialization['id']
+    item = Item(item_id, item_serialization)
+    if item.hasPropertyItemValue('P31', BLACKLISTED_ITEMS):
         continue
-    if int(item['id'][1:]) % 1000 == 0:
+
+    if int(item_id[1:]) % 1000 == 0:
         ordered_stats = OrderedDict(
             sorted(ext_idefs_stats.items(), key=lambda t: t[1],
                    reverse=True))
         res['detailed_stats'] = ordered_stats
         storage.store('extracted_stats.json', res)
-        print(item['id'])
-    (total, unrefed, external_idefs, ext_idefs_stats_in_item) = handle_statements(item['claims'])
+        print(item_id)
+    (total, unrefed, external_idefs, ext_idefs_stats_in_item) = inspect_statements(item)
     if unrefed == 0:
         res['fully_refed_items'] += 1
         continue

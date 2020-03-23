@@ -1,6 +1,11 @@
 DUMP_PATH?='/mnt/data/xmldatadumps/public/wikidatawiki/entities/latest-all.json.gz'
 
-data/final_res.json: \
+data/usable_ext_idefs.jsonl: \
+	data/external_idefs.json \
+	data/whitelisted_ext_idefs.json
+	python3 scripts/extract_from_dump.py ${DUMP_PATH}
+
+data/extracted_stats: \
 	data/external_idefs.json \
 	data/whitelisted_ext_idefs.json
 	python3 scripts/extract_stats.py ${DUMP_PATH}

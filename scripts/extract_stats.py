@@ -4,8 +4,8 @@ from collections import OrderedDict
 
 from wikidatarefisland.config import BLACKLISTED_ITEMS, CLASSIFYING_PROPERTIES
 from wikidatarefisland.dump_reader import DumpReader
-from wikidatarefisland.storage import Storage
 from wikidatarefisland.item import Item
+from wikidatarefisland.storage import Storage
 
 storage = Storage.newFromScript(os.path.realpath(__file__))
 
@@ -32,7 +32,6 @@ def inspect_statements(item):
             statements_that_should_have_ref += 1
             if not claim.hasValidReference():
                 unrefed_statements += 1
-                continue
 
     return (statements_that_should_have_ref, unrefed_statements, ex_idefs, ext_idefs_stats)
 

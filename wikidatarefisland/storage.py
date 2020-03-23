@@ -11,15 +11,21 @@ class Storage(object):
         with open(path, 'r') as f:
             return json.loads(f.read())
 
-    def store(self, file_, value):
+    def store(self, file_, value, raw=False):
         path = os.path.join(self.path, file_)
         with open(path, 'w') as f:
-            f.write(json.dumps(value))
+            if raw:
+                f.write(value)
+            else:
+                f.write(json.dumps(value))
 
-    def append(self, file_, value):
+    def append(self, file_, value, raw=False):
         path = os.path.join(self.path, file_)
         with open(path, 'a') as f:
-            f.write(json.dumps(value))
+            if raw:
+                f.write(value)
+            else:
+                f.write(json.dumps(value))
 
     @classmethod
     def newFromScript(cls, path):

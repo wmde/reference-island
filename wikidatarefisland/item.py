@@ -44,6 +44,16 @@ class Claim(object):
         except:
             return None
 
+    def hasItemValue(self):
+        value = self.getValue()
+        if not value:
+            return False
+        if not isinstance(value, dict):
+            return False
+        if value.get('entity-type') != 'item':
+            return False
+        return True
+
     def getItemValue(self):
         if not self.getValue():
             return None

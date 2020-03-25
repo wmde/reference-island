@@ -11,6 +11,15 @@ class Storage(object):
         with open(path, 'r') as f:
             return json.loads(f.read())
 
+    def getLines(self, file_):
+        path = os.path.join(self.path, file_)
+        with open(path, 'r') as f:
+            for line in f:
+                try:
+                    yield json.loads(line)
+                except:
+                    continue
+
     def store(self, file_, value, raw=False):
         path = os.path.join(self.path, file_)
         with open(path, 'w') as f:

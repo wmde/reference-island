@@ -35,11 +35,28 @@ def extract_external_idef_data(pid, value):
         r = requests.get(url, timeout=30)
         base_url = get_base_url(r.text, r.url)
         data = extruct.extract(r.text, base_url=base_url)
-        if not data.get('microdata'):
+        if not data.get('microdata') and not data.get('json-ld'):
             return extracted_data
-    except Exception as err:
+    except KeyboardInterrupt:
+        raise
+    except:
         return extracted_data
-    for datum in data['microdata']:
+    for datum in data.get('json-ld', []):
+        for property_ in datum:
+            if property_.startswith('@'):
+                continue
+            if not datum[property_]:
+                continue
+            if 'http://schema.org/' + property_ in wtf_mapping:
+                value_pid = wtf_mapping['http://schema.org/' + property_][0]
+                value_pid = value_pid.replace('http://www.wikidata.org/entity/', '')
+                data_set = extracted_data.get(value_pid, [])
+                if not datum[property_] in data_set:
+                    data_set.append(datum[property_])
+                extracted_data[value_pid] = data_set
+            else:
+                non_existing_schemaorg_types[property_] += 1
+    for datum in data.get('microdata', []):
         for property_ in datum.get('properties', []):
             if not datum['properties'][property_]:
                 continue

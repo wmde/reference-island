@@ -2,7 +2,8 @@ import json
 import os
 import sys
 
-from wikidatarefisland.config import BLACKLISTED_ITEMS, CLASSIFYING_PROPERTIES
+from wikidatarefisland.config import (
+    BLACKLISTED_ITEMS, CLASSIFYING_PROPERTIES, BLACKLISTED_EXTERNAL_IDENTIFIERS)
 from wikidatarefisland.dump_reader import DumpReader
 from wikidatarefisland.item import Item
 from wikidatarefisland.storage import Storage
@@ -19,7 +20,7 @@ def inspect_statements(item):
     for pid in item.getClaims():
         if pid in CLASSIFYING_PROPERTIES:
             continue
-        if pid in whitelisted_ext_idefs:
+        if pid in whitelisted_ext_idefs and pid not in BLACKLISTED_EXTERNAL_IDENTIFIERS:
             for claim in item.getPropertyClaims(pid):
                 ext_idefs.append((pid, claim.getValue()))
             continue

@@ -20,3 +20,4 @@ data/whitelisted_ext_idefs.json: \
 .PHONY: clean
 clean:
 	rm data/*.json
+	rm data/*.jsonl

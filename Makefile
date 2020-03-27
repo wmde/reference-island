@@ -13,9 +13,9 @@ data/extracted_stats: \
 data/external_idefs.json:
 	python3 scripts/generate_list_of_all_ext_idefs.py
 
-data/whitelisted_ext_idefs.json: \
-	data/external_idefs.json
-	python3 scripts/examine_ext_idefs.py
+#data/whitelisted_ext_idefs.json: \
+#	data/external_idefs.json
+#	python3 scripts/examine_ext_idefs.py
 
 .PHONY: clean
 clean:

@@ -11,7 +11,6 @@ BLACKLISTED_ITEMS = [
 BLACKLISTED_EXTERNAL_IDENTIFIERS = [
     'P646',  # Freebase
     'P345',  # IMDb
-    'P345',
     'P434',
     'P436',
     'P1953',

@@ -49,7 +49,7 @@ for item_serialization in dump_reader.read_items():
         print(item_id)
         storage.append(
             'final_data.jsonl',
-            '\n'.join([json.dumps(i, ensure_ascii=False) for i in final_data]),
+            '\n'.join([json.dumps(i, ensure_ascii=False) for i in final_data]) + '\n',
             raw=True)
         final_data = []
     (unrefed_statements_item, ext_idefs) = inspect_statements(item)

@@ -96,6 +96,7 @@ def check_data(item_data):
                     item_id,
                     claim,
                     ext_idef_property,
+                    ext_idef_value,
                     url,
                     extracted_data[ext_idef][pid],
                     strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -120,7 +121,7 @@ def main():
         checked_items[item_data['item_id']] = True
         storage.append(
             'extracted_refs.jsonl',
-            '\n'.join([json.dumps(i, ensure_ascii=False) for i in data]),
+            '\n'.join([json.dumps(i, ensure_ascii=False) for i in data]) + '\n',
             raw=True)
         storage.store('checked_items.json', checked_items)
 

@@ -79,7 +79,7 @@ def check_data(item_data):
     item_id = item_data['item_id']
     final_final_data = []
     for ext_idef in ext_idefs:
-        if not ext_idef[0] or ext_idef[1]:
+        if not ext_idef[0] or not ext_idef[1]:
             continue
         key = ext_idef[0] + ':' + ext_idef[1]
         extracted_data[key] = extract_external_idef_data(ext_idef[0], ext_idef[1])

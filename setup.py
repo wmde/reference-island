@@ -1,9 +1,13 @@
 from setuptools import setup, find_packages
 
+with open('requirements.txt', 'r') as f:
+    requirements = f.read().split('\n')
+
 
 extras_require = {
     'tests': [
-        'flake8>=3.2.1',
+        'flake8>=3.2.1, <3.999.0',
+        'pytest>5.4.0, <5.999.0'
     ],
 }
 
@@ -15,7 +19,7 @@ setup(
     license="GPLv3",
     url="https://github.com/wmde/reference-island",
     long_description='',
-    install_requires=[],
+    install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",
         "Development Status :: 3 - Alpha",

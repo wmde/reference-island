@@ -1,5 +1,28 @@
 # Wikidata Reference Island
 
+## Installation and Running Tests
+We can create a python virtual environment.
+This has the advantage of keeping dependencies from this project separate from your system.
+
+Create a venv in a folder `./venv`
+`python3 -m venv venv`
+
+Active the virtual environment:
+`source venv/bin/active`
+
+Install this library and test dependencies:
+`pip3 install .`
+`pip3 install -e .[tests]`
+
+Run linter:
+`flake8 .`
+
+Run tests:
+`pytest`
+
+To leave the virtual environment:
+`deactivate`
+
 ## Glossary
 
 The following terms will be used throughout this document, their meanings are as follows:

@@ -21,3 +21,18 @@ def mock_response(monkeypatch):
 def test_get_sparql_data(mock_response):
     result = WdqsReader('Fake UA', 'https://fakewebsite').get_sparql_data('Wrong query')
     assert result == [{'a': 'b'}]
+
+
+def test_get_usages(monkeypatch):
+    # TODO: Improve the test
+    def mock_query(sparql):
+        assert sparql.queryString == """SELECT ?property ?url
+WHERE {
+  ?property wdt:P1628 ?url.
+  FILTER(STRSTARTS(str(?url), "http://schema.org")).
+}"""
+        return MockResponse()
+
+    monkeypatch.setattr(SPARQLWrapper, "query", mock_query)
+
+    WdqsReader('Fake UA', 'https://fakewebsite').get_schemaorg_mapping()

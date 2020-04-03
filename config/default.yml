@@ -77,3 +77,9 @@ blacklisted_properties:
 
 data_storage_path:
     'data/'
+
+user_agent:
+    'wikidata-reference-island (https://github.com/wmde/reference-island) requests python'
+
+wdqs_url:
+    'https://query.wikidata.org/sparql'

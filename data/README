@@ -1,1 +1,6 @@
 This directory holds the data extracted
+
+# Explaination of contents of files
+## ext_idef_check_result_limit10.json
+The results of scraping URLS and extracting data using the python extruct library.
+The URLs to scrape are 10 URLS derived from items which contain the external IDs that are whitelisted in `whitelisted_ext_idefs.json`

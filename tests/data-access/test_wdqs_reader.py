@@ -26,6 +26,21 @@ def test_get_sparql_data(mock_response):
 def test_get_usages(monkeypatch):
     # TODO: Improve the test
     def mock_query(sparql):
+        assert sparql.queryString == """SELECT ?item ?value
+WHERE {
+?item wdt:P1 ?value
+}
+LIMIT 10"""
+        return MockResponse()
+
+    monkeypatch.setattr(SPARQLWrapper, "query", mock_query)
+
+    WdqsReader('Fake UA', 'https://fakewebsite').get_usecases('P1')
+
+
+def test_get_schemaorg_mapping(monkeypatch):
+    # TODO: Improve the test
+    def mock_query(sparql):
         assert sparql.queryString == """SELECT ?property ?url
 WHERE {
   ?property wdt:P1628 ?url.

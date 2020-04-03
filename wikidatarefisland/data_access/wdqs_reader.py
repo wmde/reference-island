@@ -17,9 +17,7 @@ class WdqsReader(object):
 WHERE {
 ?item wdt:""" + pid + """ ?value
 }
-
-LIMIT 10
-        """
+LIMIT 10"""
         return self.get_sparql_data(query)
 
     def get_schemaorg_mapping(self):

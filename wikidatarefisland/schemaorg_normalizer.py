@@ -14,6 +14,16 @@ class SchemaOrgNormalizer:
         return filtered_keys
 
     @staticmethod
+    def extractGraphs(extracted, scraped):
+        tail = [scraped] if "@graph" not in scraped else scraped["@graph"]
+        return extracted + tail
+
+    @staticmethod
+    def normalizeExpanded(scrapedList):
+        extracted = reduce(SchemaOrgNormalizer.extractGraphs, scrapedList)
+        return jsonld.flatten(extracted)
+
+    @staticmethod
     def normalizeMultipleExpanded(*args):
         # PROBLEM: This method inadvertently chucks away values hidden in @graph
         scrapedList = reduce(lambda acc, arg: acc + arg, args)

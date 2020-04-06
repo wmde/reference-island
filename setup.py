@@ -3,6 +3,8 @@ from setuptools import setup, find_packages
 with open('requirements.txt', 'r') as f:
     requirements = f.read().split('\n')
 
+with open('README.md', 'r') as f:
+    readme = f.read()
 
 extras_require = {
     'tests': [
@@ -18,7 +20,7 @@ setup(
     description="Data pipeline to extract reference for Wikidata",
     license="GPLv3",
     url="https://github.com/wmde/reference-island",
-    long_description='',
+    long_description=readme,
     install_requires=requirements,
     classifiers=[
         "Programming Language :: Python :: 3",

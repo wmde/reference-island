@@ -37,8 +37,7 @@ WHERE {
         return self._formatter_urls.get(pid)
 
     def _populate_formatter_urls(self):
-        query = """
-SELECT ?property ?formatter
+        query = """SELECT ?property ?formatter
 WHERE {
   ?property wdt:P1630 ?formatter
 }"""

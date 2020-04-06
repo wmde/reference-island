@@ -1,5 +1,3 @@
-import json
-
 from functools import reduce
 from pyld import jsonld
 

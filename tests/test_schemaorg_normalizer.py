@@ -4,7 +4,7 @@ from wikidatarefisland.schemaorg_normalizer import SchemaOrgNormalizer as normal
 def test_filterProps():
     assert normalizer.filterProps('schema.org'), 'Returns true when contains `schema.org`'
     assert not normalizer.filterProps('example.com'), {'Returns false when doesn\'t contain '
-                                                       '`schema.org`'} 
+                                                       '`schema.org`'}
 
 
 def test_filterScraped():
@@ -13,4 +13,3 @@ def test_filterScraped():
     assert not normalizer.filterScraped({'example.com': 'test'}), {'Returns false when scrape '
                                                                    'doesn\'t have `schema.org '
                                                                    'keys`'}
-

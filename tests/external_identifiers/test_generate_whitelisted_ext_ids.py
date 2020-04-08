@@ -53,4 +53,5 @@ def test_run(monkeypatch):
     whitelist = generate_whitelisted_ext_id.run()
     assert whitelist == ['P1']
     assert storage.get(generate_whitelisted_ext_id.result_file_name) == \
-        {'P1': (10, 10, 10), 'P2': (10, 10, 0)}
+        {'P1': {'good_responses': 10, 'has_schema': 10, 'total_requests': 10},
+         'P2': {'good_responses': 10, 'has_schema': 0, 'total_requests': 10}}

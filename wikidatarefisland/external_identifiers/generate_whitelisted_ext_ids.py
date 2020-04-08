@@ -44,7 +44,9 @@ class GenerateWhitelistedExtIds():
             # TODO: Proper check
             if 'http://schema.org' in r.text:
                 schema_org_responses += 1
-        return total_number, good_responses, schema_org_responses
+        return {'total_requests': total_number,
+                'good_responses': good_responses,
+                'has_schema': schema_org_responses}
 
     def check_external_identifier(self, pid, formatter_url):
         print('Checking {0}'.format(pid))
@@ -84,7 +86,7 @@ class GenerateWhitelistedExtIds():
         data = self.storage.get(self.result_file_name)
         schemas = []
         for i in data:
-            if data[i][2] > int(self.no_checks / 2):
+            if data[i]['has_schema'] > int(self.no_checks / 2):
                 schemas.append(i)
 
         return schemas

@@ -1,7 +1,7 @@
 import requests
 
 from wikidatarefisland.external_identifiers import GenerateWhitelistedExtIds
-from wikidatarefisland.services import ExternalIdentifierToUrlMapper
+from wikidatarefisland.services import ExternalIdentifierFormatter
 
 
 class MockResponse:
@@ -18,11 +18,11 @@ class MockWdqsReader():
         return ['P1', 'P2', 'P3']
 
 
-class MockExternalIdentifierToUrlMapper(ExternalIdentifierToUrlMapper):
-    def get_formatter(self, pid):
+class MockExternalIdentifierFormatter(ExternalIdentifierFormatter):
+    def format(self, pid, value):
         if pid == 'P1':
-            return ['https://example_with_schema.org/$1']
-        return ['https://example_without_schema.org/$1']
+            return {'url': 'https://example_with_schema.org/' + value}
+        return {'url': 'https://example_without_schema.org/' + value}
 
 
 class MockStorage():
@@ -49,7 +49,7 @@ def test_run(monkeypatch):
     monkeypatch.setattr(requests, "get", mock_get)
     storage = MockStorage()
     generate_whitelisted_ext_id = GenerateWhitelistedExtIds(
-        MockWdqsReader(), storage, MockConfig(), MockExternalIdentifierToUrlMapper())
+        MockWdqsReader(), storage, MockConfig(), MockExternalIdentifierFormatter())
     whitelist = generate_whitelisted_ext_id.run()
     assert whitelist == ['P1']
     assert storage.get(generate_whitelisted_ext_id.result_file_name) == \

@@ -1,4 +1,4 @@
-from .external_identifier_to_url_mapper import (ExternalIdentifierToUrlMapper,
-                                                WdqsExternalIdentifierToUrlMapper)
+from .external_identifier_formatter import (ExternalIdentifierFormatter,
+                                            WdqsExternalIdentifierFormatter)
 
-__all__ = [ExternalIdentifierToUrlMapper, WdqsExternalIdentifierToUrlMapper]
+__all__ = [ExternalIdentifierFormatter, WdqsExternalIdentifierFormatter]

@@ -17,11 +17,11 @@ def main():
     config = Config.newFromScriptPath(file_path)
     wdqs_reader = data_access.WdqsReader.newFromConfig(config)
     storage = data_access.Storage.newFromScript(file_path)
-    external_identifier_to_url_mapper = services.WdqsExternalIdentifierToUrlMapper(wdqs_reader)
+    external_identifier_formatter = services.WdqsExternalIdentifierFormatter(wdqs_reader)
 
     if 'ss1' in steps or 'all' in steps:
         external_identifiers.GenerateWhitelistedExtIds(
-            wdqs_reader, storage, config, external_identifier_to_url_mapper).run()
+            wdqs_reader, storage, config, external_identifier_formatter).run()
 
 
 if __name__ == "__main__":

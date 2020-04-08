@@ -21,14 +21,6 @@ WHERE {
 LIMIT """ + str(limit)
         return self.get_sparql_data(query)
 
-    def get_schemaorg_mapping(self):
-        query = """SELECT ?property ?url
-WHERE {
-  ?property wdt:P1628 ?url.
-  FILTER(STRSTARTS(str(?url), "http://schema.org")).
-}"""
-        return self.get_sparql_data(query)
-
     def get_all_external_identifiers(self):
         query = """SELECT ?externalIdProps
 WHERE {

@@ -2,8 +2,8 @@ from collections import defaultdict
 
 
 class ExternalIdentifierFormatter(object):
-    """ Side-step 4: Mapper of property id to list of formatters for that property"""
-    def get_formatter(self, pid):
+    """ Side-step 4: Formatter of external identifier to url and items"""
+    def format(self, pid, value):
         raise NotImplementedError
 
 

@@ -40,21 +40,6 @@ LIMIT 42"""
     WdqsReader('Fake UA', 'https://fakewebsite').get_usecases('P1', 42)
 
 
-def test_get_schemaorg_mapping(monkeypatch):
-    # TODO: Improve the test
-    def mock_query(sparql):
-        assert sparql.queryString == """SELECT ?property ?url
-WHERE {
-  ?property wdt:P1628 ?url.
-  FILTER(STRSTARTS(str(?url), "http://schema.org")).
-}"""
-        return MockResponse()
-
-    monkeypatch.setattr(SPARQLWrapper, "query", mock_query)
-
-    WdqsReader('Fake UA', 'https://fakewebsite').get_schemaorg_mapping()
-
-
 def test_get_all_external_identifiers(monkeypatch):
     def mock_query(*args, **kwargs):
         return MockResponse([{'externalIdProps': {'value': 'http://www.wikidata.org/entity/P42'}}])

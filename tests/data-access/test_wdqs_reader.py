@@ -55,17 +55,6 @@ WHERE {
     WdqsReader('Fake UA', 'https://fakewebsite').get_schemaorg_mapping()
 
 
-def test_get_formatter(monkeypatch):
-    def mock_query(*args, **kwargs):
-        return MockResponse([{'property': {'value': 'http://www.wikidata.org/entity/P1'},
-                              'formatter': {'value': 'https://example.com/$1'}}])
-
-    monkeypatch.setattr(SPARQLWrapper, "query", mock_query)
-
-    res = WdqsReader('Fake UA', 'https://fakewebsite').get_formatter('P1')
-    assert res == ['https://example.com/$1']
-
-
 def test_get_all_external_identifiers(monkeypatch):
     def mock_query(*args, **kwargs):
         return MockResponse([{'externalIdProps': {'value': 'http://www.wikidata.org/entity/P42'}}])

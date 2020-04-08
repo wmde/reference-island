@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from SPARQLWrapper import JSON, SPARQLWrapper
 
 
@@ -30,21 +28,6 @@ WHERE {
   FILTER(STRSTARTS(str(?url), "http://schema.org")).
 }"""
         return self.get_sparql_data(query)
-
-    def get_formatter(self, pid):
-        if self._formatter_urls == {}:
-            self._populate_formatter_urls()
-        return self._formatter_urls.get(pid)
-
-    def _populate_formatter_urls(self):
-        query = """SELECT ?property ?formatter
-WHERE {
-  ?property wdt:P1630 ?formatter
-}"""
-        self._formatter_urls = defaultdict(list)
-        for case in self.get_sparql_data(query):
-            pid = case['property']['value'].replace('http://www.wikidata.org/entity/', '')
-            self._formatter_urls[pid].append(case['formatter']['value'])
 
     def get_all_external_identifiers(self):
         query = """SELECT ?externalIdProps

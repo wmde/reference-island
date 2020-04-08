@@ -4,19 +4,24 @@ import requests
 
 
 class GenerateWhitelistedExtIds():
-    def __init__(self, wdqs_reader, storage, config, no_checks=10, no_processes=10):
+
+    def __init__(self, wdqs_reader, storage, config, external_identifier_to_url_mapper,
+                 no_checks=10, no_processes=10):
         """
         Implementation of Side-step 1
 
         :type wdqs_reader: wikidatarefisland.data_access.WdqsReader
         :type storage: wikidatarefisland.data_access.Storage
         :type config: wikidatarefisland.Config
+        :type external_identifier_to_url_mapper:
+            wikidatarefisland.data_access.ExternalIdentifierToUrlMapper
         """
         self.wdqs_reader = wdqs_reader
         self.storage = storage
         self.config = config
         self.no_checks = no_checks
         self.no_processes = no_processes
+        self.external_identifier_to_url_mapper = external_identifier_to_url_mapper
         self.result_file_name = 'ext_ids_check_result.json'
 
     def check_cases(self, usecases, formatter_urls_for_id):
@@ -57,7 +62,7 @@ class GenerateWhitelistedExtIds():
         for i in external_identifiers:
             if i in final_results or i in self.config.get('blacklisted_properties'):
                 continue
-            formatter_url = self.wdqs_reader.get_formatter(i)
+            formatter_url = self.external_identifier_to_url_mapper.get_formatter(i)
             if not formatter_url:
                 print('{0} does not have a formatter'.format(i))
                 continue

@@ -1,7 +1,7 @@
 import requests
 
 from wikidatarefisland.external_identifiers import GenerateWhitelistedExtIds
-from wikidatarefisland.data_access import ExternalIdentifierToUrlMapper
+from wikidatarefisland.services import ExternalIdentifierToUrlMapper
 
 
 class MockResponse:

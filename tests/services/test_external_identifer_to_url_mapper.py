@@ -1,4 +1,4 @@
-from wikidatarefisland.data_access import WdqsExternalIdentifierToUrlMapper
+from wikidatarefisland.services import WdqsExternalIdentifierToUrlMapper
 
 
 class MockWdqsReader():

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from wikidatarefisland import data_access, Config, external_identifiers
+from wikidatarefisland import data_access, Config, external_identifiers, services
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     config = Config.newFromScriptPath(file_path)
     wdqs_reader = data_access.WdqsReader.newFromConfig(config)
     storage = data_access.Storage.newFromScript(file_path)
-    external_identifier_to_url_mapper = data_access.WdqsExternalIdentifierToUrlMapper(wdqs_reader)
+    external_identifier_to_url_mapper = services.WdqsExternalIdentifierToUrlMapper(wdqs_reader)
 
     if 'ss1' in steps or 'all' in steps:
         external_identifiers.GenerateWhitelistedExtIds(

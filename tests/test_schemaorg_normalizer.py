@@ -307,7 +307,6 @@ class TestSchemaOrgNormalizer:
 
         assert result == expected, "Should normalize nested compacted data"
 
-
     def test_normalizeFromExtruct_multiple(self):
         given = {
             'some_key': [

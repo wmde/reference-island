@@ -5,7 +5,6 @@ class WdqsReader(object):
     def __init__(self, user_agent, url):
         self.user_agent = user_agent
         self.url = url
-        self._formatter_urls = {}
 
     def get_sparql_data(self, query):
         sparql = SPARQLWrapper(self.url, agent=self.user_agent)

@@ -12,21 +12,23 @@ class WdqsReader(object):
         sparql.setReturnFormat(JSON)
         return sparql.query().convert()['results']['bindings']
 
-    def get_usecases(self, pid):
+    def get_usecases(self, pid, limit=10):
         query = """SELECT ?item ?value
 WHERE {
 ?item wdt:""" + pid + """ ?value
 }
-LIMIT 10"""
+LIMIT """ + str(limit)
         return self.get_sparql_data(query)
 
-    def get_schemaorg_mapping(self):
-        query = """SELECT ?property ?url
+    def get_all_external_identifiers(self):
+        query = """SELECT ?externalIdProps
 WHERE {
-  ?property wdt:P1628 ?url.
-  FILTER(STRSTARTS(str(?url), "http://schema.org")).
+  ?externalIdProps wikibase:propertyType <http://wikiba.se/ontology#ExternalId> .
 }"""
-        return self.get_sparql_data(query)
+
+        return [
+            i['externalIdProps']['value'].replace('http://www.wikidata.org/entity/', '')
+            for i in self.get_sparql_data(query)]
 
     @classmethod
     def newFromConfig(cls, config):

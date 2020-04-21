@@ -1,3 +1,4 @@
 PyYAML > 5.1.0, < 5.999.0
 SPARQLWrapper > 1.0.0, < 2.0.0
 PyLD >= 1.0.5, < 2.0.0
+requests > 2.20.0, < 3.0.0

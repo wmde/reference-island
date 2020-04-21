@@ -247,6 +247,30 @@ class TestSchemaOrgGraph:
 
         assert result == expected, "Should include nested nodes"
 
+    def test_get_nodes_graph_child(self):
+        given = [
+            {
+                "@graph": [
+                    {
+                        "@id": "http://example.com/124",
+                        "http://schema.org/firstName": [{"@value": "Lola"}],
+                        "http://schema.org/lastName": [{"@value": "Showgirl"}]
+                    }
+                ]
+            }
+        ]
+
+        expected = [
+            {
+                "http://schema.org/firstName": ["Lola"],
+                "http://schema.org/lastName": ["Showgirl"]
+            }
+        ]
+
+        result = SchemaOrgGraph(given).getNodes()
+
+        assert result == expected, "Should extract nested graphs"
+
     def test_toJsonLd(self):
         given = [
             {
@@ -266,6 +290,31 @@ class TestSchemaOrgGraph:
         result = SchemaOrgGraph(given).toJsonLd()
 
         assert result == given, "Should return flattened expanded json-ld format"
+
+    def test_to_jsonld_graph_child(self):
+        given = [
+            {   
+                "@graph": [
+                    {
+                        "@id": "http://example.com/124",
+                        "http://schema.org/firstName": [{"@value": "Lola"}],
+                        "http://schema.org/lastName": [{"@value": "Showgirl"}]
+                    }
+                ]
+            }
+        ]
+
+        expected = [
+            {
+                "@id": "http://example.com/124",
+                "http://schema.org/firstName": [{"@value": "Lola"}],
+                "http://schema.org/lastName": [{"@value": "Showgirl"}]
+            }
+        ]
+
+        result = SchemaOrgGraph(given).toJsonLd()
+
+        assert result == expected, "Should extract graphs"
 
 
 class TestSchemaOrgNormalizer:

@@ -1,4 +1,4 @@
-from wikidatarefisland.schemaorg_normalizer import (
+from wikidatarefisland.data_model.schemaorg_normalizer import (
     SchemaOrgNormalizer,
     SchemaOrgGraph,
     SchemaOrgNode

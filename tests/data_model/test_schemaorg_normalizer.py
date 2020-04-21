@@ -133,7 +133,7 @@ class TestSchemaOrgNode:
             "http://schema.org/name": {"@value": "test"}
         }
 
-        result = result = SchemaOrgNode(given, None).toJsonLd()
+        result = SchemaOrgNode(given, None).toJsonLd()
 
         assert result == given, "Should return expanded json-ld format"
 
@@ -144,7 +144,7 @@ class TestSchemaOrgNode:
             "http://schema.org/name": {"@value": "test"}
         }
 
-        result = result = SchemaOrgNode(given, None).toJsonLd()
+        result = SchemaOrgNode(given, None).toJsonLd()
 
         assert result == given, "Should include @type in json-ld format"
 

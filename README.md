@@ -117,17 +117,17 @@ This step will take in the following inputs and will output the data expected in
 
 This step will take the output of Pipe 2 as it's primary input. It will also take the output of SS2 as an input.
 
-One row of this file relates to one unreferenced statement. It contains the `itemId` the statement was on as well as all the extracted structured data that relates to this statement and `referenceMetadata` referring to where that data came from.
+One row of this file relates to one unreferenced statement and one potential reference, mutliple references for the same statemnet will be repeated in multiple lines. It contains the `itemId` the statement was on as well as all the extracted structured data that relates to this statement and `referenceMetadata` referring to where that data came from.
 
 The format of the template of one row of Pipe 2 is as follows:
 ```json
 {
   "statement": {statementBlob},
   "itemId": [itemId],
-  "references": [ {
+  "reference": {
     referenceMetadata: referenceBlob,
     extractedData: [ [value] ]
-    } ]
+    }
 }
 ```
 For details about the statement format see that in [Pipe 2](#statement-blob)
@@ -149,10 +149,7 @@ Note this corresponds to the format of the referenceMetadata seen in [SS4](#ss-4
 ```json
 { 
     "statement": { statementBlob }, 
-    "references": [ 
-        { referenceBlob },
-        ... 
-    ]
+    "reference": referenceBlob,
 }
 ```
 

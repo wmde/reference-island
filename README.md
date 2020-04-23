@@ -188,25 +188,26 @@ Example:
 
 
 
-## SS3: Normalize data from various scraped raw formats<a name="ss-3"></a>
+## SS3 (Utility Class): Normalize data from various scraped raw formats<a name="ss-3"></a>
 
-This service takes in raw scraped data in either `json-ld`, `microdata` or `rdfa` format (For example, the results of the following scraping library: https://github.com/scrapinghub/extruct).
+This service takes in an object containing raw scraped data in `json-ld` format (For example, the results of the following scraping library: https://github.com/scrapinghub/extruct with the [`uniform` option set to true](https://github.com/scrapinghub/extruct#uniform)).
 
-The output of this service will be a list of objects representing a Schema.org type with the following structure:
-
-* `type`: Schema.org type URL
-* `properties`: An object representing Schema.org property value pairs where the keys are Schema.org property URLs, and the values are the actual data from the site. 
-
-Example:
+The output of this service will be a list of objects representing a Schema.org type with the following structure: 
 
 ```json
 [
     {
         "type": "http://schema.org/Person",
         "properties": {
-            "http://schema.org/name": "Ludwig Wittgenstein",
-            "http://schema.org/sameAs": "http://viaf.org/viaf/24609378",
-            "http://schema.org/additionalName": "Ludvigs Vitgenšteins"
+            "http://schema.org/name": [ "Ludwig Wittgenstein" ],
+            "http://schema.org/sameAs": [ "http://viaf.org/viaf/24609378" ],
+            "http://schema.org/birthPlace": {
+              "http://schema.org/name": [ "Vienna" ],
+              "http://schema.org/geo": {
+                "latitude": "48.20849",
+                "longitude": "16.37208"
+              }
+            }
         }
     },
     ...

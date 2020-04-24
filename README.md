@@ -197,17 +197,14 @@ The output of this service will be a list of objects representing a Schema.org t
 ```json
 [
     {
-        "type": "http://schema.org/Person",
-        "properties": {
-            "http://schema.org/name": [ "Ludwig Wittgenstein" ],
-            "http://schema.org/sameAs": [ "http://viaf.org/viaf/24609378" ],
-            "http://schema.org/birthPlace": {
-              "http://schema.org/name": [ "Vienna" ],
-              "http://schema.org/geo": {
-                "latitude": "48.20849",
-                "longitude": "16.37208"
-              }
-            }
+        "http://schema.org/name": [ "Ludwig Wittgenstein" ],
+        "http://schema.org/sameAs": [ "http://viaf.org/viaf/24609378" ],
+        "http://schema.org/birthPlace": {
+          "http://schema.org/name": [ "Vienna" ],
+          "http://schema.org/geo": {
+            "http://schema.org/geo/latitude": "48.20849",
+            "http://schema.org/geo/longitude": "16.37208"
+          }
         }
     },
     ...

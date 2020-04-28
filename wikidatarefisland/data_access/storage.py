@@ -34,7 +34,9 @@ class Storage(object):
             if raw:
                 f.write(value)
             else:
-                f.write(json.dumps(value))
+                # Add newline if file is not empty
+                new_line = '\n' if os.stat(f.name).st_size else ''
+                f.write(new_line + json.dumps(value))
 
     @classmethod
     def newFromScript(cls, path):

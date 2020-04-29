@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 
 from wikidatarefisland import (Config, data_access, external_identifiers,
                                services)
@@ -7,7 +8,7 @@ from wikidatarefisland import (Config, data_access, external_identifiers,
 # from wikidatarefisland import pumps
 
 
-def main():
+def main(argv, filepath):
     parser = argparse.ArgumentParser(description='Run the pipes and/or side steps')
     parser.add_argument('--step', dest='step', type=str,
                         help='Step to run e.g. ss1 or pipe2')
@@ -18,10 +19,10 @@ def main():
     parser.add_argument('--output', default='output.json', dest='output_path', type=str,
                         help='File for the step to read output from')
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     # Services
-    file_path = os.path.realpath(__file__)
+    file_path = os.path.realpath(filepath)
     config = Config.newFromScriptPath(file_path)
     wdqs_reader = data_access.WdqsReader.newFromConfig(config)
     storage = data_access.Storage.newFromScript(file_path)
@@ -39,4 +40,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv, __file__)

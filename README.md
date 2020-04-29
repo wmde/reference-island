@@ -1,5 +1,5 @@
 # Wikidata Reference Island
-
+![reference_island_logo](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Treasure_map.png/120px-Treasure_map.png)
 ## Installation and Running Tests
 We can create a python virtual environment.
 This has the advantage of keeping dependencies from this project separate from your system.

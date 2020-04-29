@@ -67,9 +67,18 @@ class TestStorage:
         mock_file = tmpdir.join('test.json')
         mock_file.write(json.dumps(mock_lines[0]))
 
-        expected = ''.join(map(lambda l: json.dumps(l), mock_lines))
+        expected = '\n'.join(map(lambda l: json.dumps(l), mock_lines))
 
         storage = Storage(tmpdir)
         storage.append("test.json", mock_lines[1])
 
         assert mock_file.read() == expected
+
+    def test_append_json_empty(self, tmpdir):
+        mock_line = {"hello": "test"}
+        mock_file = tmpdir.join('test.json')
+
+        storage = Storage(tmpdir)
+        storage.append("test.json", mock_line)
+
+        assert mock_file.read() == json.dumps(mock_line)

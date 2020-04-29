@@ -101,6 +101,9 @@ blacklisted_external_identifiers:
     - P982
     - P1651
     - P4159
+    - P3782
+    - P6578
+    - P1004
 
 data_storage_path:
     'data/'

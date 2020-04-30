@@ -51,7 +51,7 @@ def test_main_ss1(monkeypatch, test_directory):
     monkeypatch.setattr(requests, "get", mock_get)
 
     test_filename = "test_result_ss1.json"
-    mock_args = f"--step ss1 --output {test_filename}"
+    mock_args = f"this_is_ignored.py --step ss1 --output {test_filename}"
     mock_file_path = test_directory.join('scripts', 'this_is_ignored.py')
     result_file = test_directory.join('data', test_filename)
 

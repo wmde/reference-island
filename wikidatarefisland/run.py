@@ -19,7 +19,7 @@ def main(argv, filepath):
     parser.add_argument('--output', default='output.json', dest='output_path', type=str,
                         help='File for the step to read output from')
 
-    args = parser.parse_args(argv)
+    args = parser.parse_args(argv[1:])
 
     # Services
     file_path = os.path.realpath(filepath)

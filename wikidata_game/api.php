@@ -105,6 +105,7 @@ function getTiles() {
         $refApi = [
             'action' => 'wbsetreference',
             'statement' => $guid,
+            'tags' => 'reference-game',
             'snaks' => getReferenceSnak($data['reference']['referenceMetadata']),
         ];
         $tile = [

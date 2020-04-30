@@ -66,7 +66,7 @@ This step will take in the following inputs and will output the data expected in
 
     * `datatype`: The string describing the type of data held in value.
 
-    Template:
+    <a name="statement-dict"></a>Template:
     ```json
     {
       "pid": [String],
@@ -145,9 +145,10 @@ Note this corresponds to the format of the referenceMetadata seen in [SS4](#ss-4
 
 ## Pipe 5: Format potential references into Quickstatements format<a name="pipe-5"></a>
 
-### input format
+### <a name="statement-reference-blob"></a>Input format
 ```json
 { 
+    "itemId": [itemId],
     "statement": { statementBlob }, 
     "reference": referenceBlob,
 }

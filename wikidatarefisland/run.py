@@ -6,6 +6,7 @@ from wikidatarefisland import (Config, data_access, data_model, external_identif
                                services)
 
 from wikidatarefisland import pumps
+from wikidatarefisland.data_model import wikibase
 
 
 def main(argv, filepath):
@@ -43,6 +44,12 @@ def main(argv, filepath):
     if 'scrape' == args.step:
         the_scraper = pipes.ScraperPipe(config, schemaorg_normalizer, schemaorg_mapper)
         simple_pump.run(the_scraper, args.input_path, args.output_path)
+        return
+
+    if 'match' == args.step:
+        pipe = pipes.ValueMatcherPipe(wikibase.ValueMatchers)
+        simple_pump.run(pipe, args.input_path, args.output_path)
+        return
 
 
 if __name__ == "__main__":

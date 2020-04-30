@@ -10,6 +10,15 @@ from wikidatarefisland.data_access import WdqsReader
 from wikidatarefisland.services import WdqsExternalIdentifierFormatter
 
 
+def relative_path(*paths):
+    """Generate absolute path from script relative path.
+
+    Returns:
+        str -- Absolute path string
+    """
+    return os.path.join(os.path.dirname(__file__), *paths)
+
+
 @pytest.fixture()
 def test_directory(tmpdir_factory):
     tmpdir = tmpdir_factory.mktemp('directory')
@@ -19,7 +28,7 @@ def test_directory(tmpdir_factory):
     config_file = conf_dir.join('default.yml')
     override_file = conf_dir.join('override.yml')
     override_file.write('')
-    yaml_path = os.path.join(os.path.dirname(__file__), '../config/default.yml')
+    yaml_path = relative_path('..', 'config', 'default.yml')
     shutil.copy(yaml_path, config_file.strpath)
     return tmpdir
 
@@ -58,3 +67,26 @@ def test_main_ss1(monkeypatch, test_directory):
     run_main(mock_args.split(), mock_file_path)
 
     assert json.loads(result_file.read()) == ['P1234']
+
+
+def test_main_match(test_directory):
+    test_given_filename = "test_given_match.jsonl"
+    test_result_filename = "test_result_match.jsonl"
+    test_expected_filename = "test_expected_match.jsonl"
+
+    given_file = test_directory.join('data', test_given_filename)
+    result_file = test_directory.join('data', test_result_filename)
+
+    mock_input_path = relative_path('mock_data', test_given_filename)
+    mock_expected_path = relative_path('mock_data', test_expected_filename)
+
+    mock_args = f"this_is_ignored.py --step match --input {test_given_filename}" \
+                f" --output {test_result_filename}"
+    mock_file_path = test_directory.join('scripts', 'this_is_ignored.py')
+
+    shutil.copy(mock_input_path, given_file.strpath)
+
+    run_main(mock_args.split(), mock_file_path)
+
+    with open(mock_expected_path) as expected:
+        assert result_file.read() == expected.read()

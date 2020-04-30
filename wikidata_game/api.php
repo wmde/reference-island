@@ -14,7 +14,7 @@ function getDesc() {
     return [
         "label" => ["en" => $title],
         "description" => ["en" => "[https://www.wikidata.org/wiki/Wikidata:Automated_finding_references_input Reference hunt] suggestions to add references in items based on structued data in the web. Source code can be found in [https://github.com/wmde/reference-island here]"],
-        "icon" => 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/ArtificialFictionBrain.png/120px-ArtificialFictionBrain.png',
+        "icon" => 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Treasure_map.png/120px-Treasure_map.png',
     ];
 }
 

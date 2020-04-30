@@ -113,3 +113,6 @@ user_agent:
 
 wdqs_url:
     'https://query.wikidata.org/sparql'
+
+parallel_workers:
+    20

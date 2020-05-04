@@ -45,6 +45,10 @@ function getGuid($statement, $itemId) {
 function getReferenceSnak($reference) {
     $result = [];
     foreach ($reference as $pid => $value) {
+        if ($pid == 'P854') {
+            // We skip url for references given in the game: T251262#6096951
+            continue;
+        }
         if ($pid == 'P813') {
             // Time data type
             $dataValue = [

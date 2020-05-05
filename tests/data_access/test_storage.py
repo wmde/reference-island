@@ -23,7 +23,27 @@ class TestStorage:
 
         assert storage.get("test.json") == json.loads(mock_file.read())
 
-    def test_getLines(self, tmpdir):
+    def test_getLines_json(self, tmpdir):
+        mock_lines = [
+            {"test": "hello"},
+            {"goodbye": "test"}
+        ]
+
+        mock_data = '''
+        [
+            {"test": "hello"},
+            {"goodbye": "test"}
+        ]
+        '''
+
+        mock_file = tmpdir.join('test.json')
+        mock_file.write(mock_data)
+
+        storage = Storage(tmpdir)
+
+        assert list(storage.getLines('test.json')) == mock_lines
+
+    def test_getLines_jsonl(self, tmpdir):
         mock_lines = [
             {"test": "hello"},
             {"goodbye": "test"}

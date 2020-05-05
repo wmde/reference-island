@@ -78,8 +78,14 @@ mock = {
                 "longitude": "13.381021",
             }]
         },
+        "with_one_day_match": {
+            "extractedData": ["1986-05-04"]
+        },
+        "with_one_year_match": {
+            "extractedData": ["1986"]
+        },
         "with_multiple_values_match": {
-            "extractedData": ["12", "Test", {
+            "extractedData": ["12", "Test", "1986-05-04", {
                 "latitude": "52.498469",
                 "longitude": "13.381021",
             }]

@@ -18,6 +18,14 @@ given = {
     "number_mismatch": {
         "method": "match_quantity",
         "return": False
+    },
+    "geo_match": {
+        "method": "match_geo",
+        "return": True
+    },
+    "geo_mismatch": {
+        "method": "match_geo",
+        "return": False
     }
 }
 
@@ -31,6 +39,10 @@ class MockMatchers:
     def match_quantity(potential_match):
         return False
 
+    @staticmethod
+    def match_geo(potential_match):
+        return False
+
 
 class TestValueMatcherPipe:
 
@@ -38,7 +50,9 @@ class TestValueMatcherPipe:
         (given["string_match"], ["Test"]),
         (given["string_mismatch"], []),
         (given["number_match"], ["Test"]),
-        (given["number_mismatch"], [])
+        (given["number_mismatch"], []),
+        (given["geo_match"], ["Test"]),
+        (given["geo_mismatch"], [])
     ])
     def test_flow(self, monkeypatch, mock, expected):
         monkeypatch.setattr(MockMatchers, mock["method"], lambda potential_match: mock["return"])

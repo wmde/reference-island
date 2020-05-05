@@ -3,7 +3,7 @@ from wikidatarefisland.pipes import AbstractPipe
 
 
 class ValueMatcherPipe(AbstractPipe):
-    """A pipesegment to match potential references with statement data"""
+    """A pipe segment to match potential references with statement data."""
     def __init__(self, matchers: ValueMatchers):
         """Instantiate the pipe
 
@@ -25,7 +25,8 @@ class ValueMatcherPipe(AbstractPipe):
         """
         filters = [
             self.matchers.match_text,
-            self.matchers.match_quantity
+            self.matchers.match_quantity,
+            self.matchers.match_geo
         ]
 
         if not any(match(potential_match) for match in filters):

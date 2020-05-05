@@ -16,7 +16,8 @@ class Storage(object):
         with open(path, 'r') as f:
             for line in f:
                 try:
-                    yield json.loads(line)
+                    # TODO Fix this hack to make json behave a bit like jsonl: T251271
+                    yield json.loads(line.strip().strip(','))
                 except json.JSONDecodeError:
                     continue
 

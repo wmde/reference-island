@@ -39,6 +39,21 @@ given = {
     "multiple_string_match": {
         "statement": mock["statement"]["with_string"],
         "reference": mock["reference"]["with_multiple_values_match"]
+    },
+    "invalid_globe-coordinate": {
+        "statement": mock["statement"]["with_globe-coordinate"]["on_mars"]
+    },
+    "no_globe-coordinate_match": {
+        "statement": mock["statement"]["with_globe-coordinate"]["on_earth"],
+        "reference": mock["reference"]["without_match"]
+    },
+    "single_globe-coordinate_match": {
+        "statement": mock["statement"]["with_globe-coordinate"]["on_earth"],
+        "reference": mock["reference"]["with_one_geo_match"]
+    },
+    "multiple_globe-coordinate_match": {
+        "statement": mock["statement"]["with_globe-coordinate"]["on_earth"],
+        "reference": mock["reference"]["with_multiple_values_match"]
     }
 }
 
@@ -64,3 +79,13 @@ class TestValueMatchers:
     ])
     def test_match_quantity(self, given, expected):
         assert ValueMatchers.match_quantity(given) == expected
+
+    @pytest.mark.parametrize("given,expected", [
+        (given["no_type"], False),
+        (given["invalid_globe-coordinate"], False),
+        (given["no_globe-coordinate_match"], False),
+        (given["single_globe-coordinate_match"], True),
+        (given["multiple_globe-coordinate_match"], True),
+    ])
+    def test_match_geo(self, given, expected):
+        assert ValueMatchers.match_geo(given) == expected

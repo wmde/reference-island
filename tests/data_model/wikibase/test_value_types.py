@@ -1,7 +1,7 @@
 import pytest
 
 from wikidatarefisland.data_model.wikibase.value_types import (
-    TextValue, QuantityValue, DateTimeValue
+    TextValue, QuantityValue, DateTimeValue, GeoValue
 )
 
 from mock_data import mock
@@ -41,3 +41,19 @@ class TestDateTimeValue:
     ])
     def test_equivalence(self, statement, equivalent):
         assert DateTimeValue(statement) == equivalent
+
+
+class TestGeoValue:
+
+    @pytest.mark.parametrize("statement,equivalent", [
+        (mock["statement"]["with_globe-coordinate"]["on_earth"], {
+            "latitude": "52.498469",
+            "longitude": "13.381021"
+        }),
+        (mock["statement"]["with_globe-coordinate"]["on_earth"], {
+            "latitude": 52.498469,
+            "longitude": 13.381021
+        })
+    ])
+    def test_equivalence(self, statement, equivalent):
+        assert GeoValue(statement) == equivalent

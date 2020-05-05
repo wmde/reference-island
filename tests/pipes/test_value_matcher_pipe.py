@@ -26,6 +26,14 @@ given = {
     "geo_mismatch": {
         "method": "match_geo",
         "return": False
+    },
+    "datetime_match": {
+        "method": "match_datetime",
+        "return": True
+    },
+    "datetime_mismatch": {
+        "method": "match_datetime",
+        "return": False
     }
 }
 
@@ -43,6 +51,10 @@ class MockMatchers:
     def match_geo(potential_match):
         return False
 
+    @staticmethod
+    def match_datetime(potential_match):
+        return False
+
 
 class TestValueMatcherPipe:
 
@@ -52,7 +64,9 @@ class TestValueMatcherPipe:
         (given["number_match"], ["Test"]),
         (given["number_mismatch"], []),
         (given["geo_match"], ["Test"]),
-        (given["geo_mismatch"], [])
+        (given["geo_mismatch"], []),
+        (given["datetime_match"], ["Test"]),
+        (given["datetime_mismatch"], [])
     ])
     def test_flow(self, monkeypatch, mock, expected):
         monkeypatch.setattr(MockMatchers, mock["method"], lambda potential_match: mock["return"])

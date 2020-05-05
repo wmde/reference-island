@@ -26,7 +26,8 @@ class ValueMatcherPipe(AbstractPipe):
         filters = [
             self.matchers.match_text,
             self.matchers.match_quantity,
-            self.matchers.match_geo
+            self.matchers.match_geo,
+            self.matchers.match_datetime
         ]
 
         if not any(match(potential_match) for match in filters):

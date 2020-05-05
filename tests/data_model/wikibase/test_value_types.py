@@ -1,6 +1,8 @@
 import pytest
 
-from wikidatarefisland.data_model.wikibase.value_types import TextValue, QuantityValue, DateTimeValue
+from wikidatarefisland.data_model.wikibase.value_types import (
+    TextValue, QuantityValue, DateTimeValue
+)
 
 from mock_data import mock
 

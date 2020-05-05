@@ -63,8 +63,11 @@ class DateTimeValue:
         compare_sign = other[0] if has_sign else '+'
         compare_string = other[1:] if has_sign else other
 
-        date = isoparse(self.value)
-        compare = isoparse(compare_string)
+        try:
+            compare = isoparse(compare_string)
+            date = isoparse(self.value)
+        except ValueError:
+            return False
 
         if self.sign != compare_sign:
             return False

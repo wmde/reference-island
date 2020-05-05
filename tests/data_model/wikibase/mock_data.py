@@ -20,6 +20,29 @@ mock = {
                 "text": "Test"
             }
         },
+        "with_datetime": {
+            "day_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-05-04T00:00:00Z',
+                    "precision": '11'
+                }
+            },
+            "month_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-05-04T00:00:00Z',
+                    "precision": '10'
+                }
+            },
+            "year_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-05-04T00:00:00Z',
+                    "precision": '9'
+                }
+            }
+        },
         "without_type": {
             "datatype": 'some-other-data'
         }

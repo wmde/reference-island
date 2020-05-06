@@ -45,6 +45,20 @@ This step will take in the following inputs, and will output the data expected i
 
 A python implementation of this pipe can be found as `ItemExtractorPipe` in `item_extractor_pipe.py`
 
+### Getting some initial data
+Obtaining a small sample to test this pipe with locally can be a challenge. The python implementation was designed to
+work either complete or partial parts of the JSON dumps of Wikidata. See: https://dumps.wikimedia.org/other/wikibase/wikidatawiki/
+
+A very rough dump can be obtained by doing the following:
+`wget https://dumps.wikimedia.org/other/wikibase/wikidatawiki/latest-all.json.gz`
+and hitting Ctrl-C after bit of data has transferred
+
+Then writing this to a json file:
+`zcat latest-all.json.gz > dumps.json`
+
+You might see errors since there will probably be a partial chunk that is missing but this isn't a
+problem with the python implementation since the partially corrupt last line will just be ignored.
+
 ## Pipe 2: Scrape given URLs for potential matches between  unreferenced statements and structured data<a name="pipe-2"></a>
 
 This step will take in the following inputs and will output the data expected in [Pipe 3](#pipe-3).

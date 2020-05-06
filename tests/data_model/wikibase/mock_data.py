@@ -20,6 +20,29 @@ mock = {
                 "text": "Test"
             }
         },
+        "with_datetime": {
+            "day_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-05-04T00:00:00Z',
+                    "precision": '11'
+                }
+            },
+            "month_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-05-04T00:00:00Z',
+                    "precision": '10'
+                }
+            },
+            "year_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-05-04T00:00:00Z',
+                    "precision": '9'
+                }
+            }
+        },
         "with_globe-coordinate": {
             "on_earth": {
                 "datatype": 'globe-coordinate',
@@ -55,8 +78,14 @@ mock = {
                 "longitude": "13.381021",
             }]
         },
+        "with_one_day_match": {
+            "extractedData": ["1986-05-04"]
+        },
+        "with_one_year_match": {
+            "extractedData": ["1986"]
+        },
         "with_multiple_values_match": {
-            "extractedData": ["12", "Test", {
+            "extractedData": ["12", "Test", "1986-05-04", {
                 "latitude": "52.498469",
                 "longitude": "13.381021",
             }]

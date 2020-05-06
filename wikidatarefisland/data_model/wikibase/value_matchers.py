@@ -1,4 +1,4 @@
-from .value_types import TextValue, QuantityValue, GeoValue
+from .value_types import TextValue, QuantityValue, GeoValue, DateTimeValue
 
 
 class ValueMatchers:
@@ -6,6 +6,7 @@ class ValueMatchers:
     STRING_DATATYPES = ["string", "url", "monolingualtext"]
     NUMBER_DATATYPES = ["quantity"]
     GEO_DATATYPES = ["globe-coordinate"]
+    DATETIME_DATATYPES = ["time"]
 
     @staticmethod
     def match_text(statement_reference):
@@ -45,6 +46,32 @@ class ValueMatchers:
             return False
 
         value = QuantityValue(statement)
+        reference = statement_reference["reference"]
+
+        return value in reference["extractedData"]
+
+    @staticmethod
+    def match_datetime(statement_reference):
+        """Matches two ISO8601 datetime string values.
+
+        Arguments:
+            statement_reference {dict} -- a statement -reference blob dictionary.
+                See: https://github.com/wmde/reference-island#statement-reference-blob
+
+        Returns:
+            bool -- True if a match exists, False otherwise.
+        """
+        statement = statement_reference["statement"]
+
+        if statement["datatype"] not in ValueMatchers.DATETIME_DATATYPES:
+            return False
+
+        value = DateTimeValue(statement)
+
+        # 11 - Day Precision, 9 - Year precision
+        if value.precision != '11' and value.precision != '9':
+            return False  # Skipping other precisions as per T250916
+
         reference = statement_reference["reference"]
 
         return value in reference["extractedData"]

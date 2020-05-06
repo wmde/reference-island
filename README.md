@@ -43,6 +43,8 @@ This step will take in the following inputs, and will output the data expected i
 
 * `items`: List of Wikidata item serializations, as described in the [Wikibase Data Model documentation](https://www.mediawiki.org/wiki/Wikibase/DataModel/JSON)
 
+A python implementation of this pipe can be found as `ItemExtractorPipe` in `item_extractor_pipe.py`
+
 ## Pipe 2: Scrape given URLs for potential matches between  unreferenced statements and structured data<a name="pipe-2"></a>
 
 This step will take in the following inputs and will output the data expected in [Pipe 3](#pipe-3).

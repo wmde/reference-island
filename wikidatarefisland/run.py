@@ -20,6 +20,10 @@ def main(argv, filepath):
     parser.add_argument('--output', default='output.json', dest='output_path', type=str,
                         help='File for the step to read output from')
 
+    parser.add_argument('--side-service-input', default='side_service_input.json',
+                        dest='side_service_input_path', type=str,
+                        help='Optional file for the step to read input from')
+
     args = parser.parse_args(argv[1:])
 
     # Services
@@ -40,6 +44,15 @@ def main(argv, filepath):
 
         storage.store(args.output_path, ext_ids)
         return
+
+    if 'extract_items' == args.step:
+        whitelisted_ext_ids = storage.get(args.side_service_input_path)
+        item_extractor = pipes.ItemExtractorPipe(
+            external_identifier_formatter,
+            config.get('blacklisted_properties'),
+            whitelisted_ext_ids
+        )
+        simple_pump.run(item_extractor, args.input_path, args.output_path)
 
     if 'scrape' == args.step:
         the_scraper = pipes.ScraperPipe(config, schemaorg_normalizer, schemaorg_mapper)

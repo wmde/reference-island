@@ -49,7 +49,9 @@ class ScraperPipe(AbstractPipe):
                                           schemaorg_mapping, item)
 
     def _check_external_identifier(self, url):
-        r = requests.get(url, timeout=30, user_agent=self.config.get('user_agent'))
+        session = requests.Session()
+        session.headers.update({'User-Agent': self.config.get('user_agent')})
+        r = session.get(url, timeout=30)
         base_url = get_base_url(r.text, r.url)
         data = extruct.extract(r.text, base_url=base_url, uniform=True)
         return {'data': self.schemaorg_normalizer.normalize_from_extruct(data),
@@ -65,20 +67,21 @@ class ScraperPipe(AbstractPipe):
     def _get_data_per_url(self, url, data, resourceUrls, mapping, item):
         final_data = []
         resourceUrls[url]['dateRetrieved'] = data['timestamp']
-        for schema_property in data['data']:
-            if schema_property not in mapping:
-                continue
-            pid = mapping[schema_property]
-            for statement in item['statements']:
-                if statement['pid'] != pid:
+        for datum in data['data']:
+            for schema_property in datum:
+                if schema_property not in mapping:
                     continue
+                pid = mapping[schema_property]
+                for statement in item['statements']:
+                    if statement['pid'] != pid:
+                        continue
 
-                formatted = self._format_result(
-                    statement,
-                    item['itemId'],
-                    resourceUrls[url],
-                    data['data'][schema_property])
-                final_data.append(formatted)
+                    formatted = self._format_result(
+                        statement,
+                        item['itemId'],
+                        resourceUrls[url],
+                        datum[schema_property])
+                    final_data.append(formatted)
         return final_data
 
     def _format_result(self, statement, item_id, metadata, extracted_data):

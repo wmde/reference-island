@@ -27,7 +27,7 @@ class Storage(object):
             if raw:
                 f.write(value)
             else:
-                f.write(json.dumps(value))
+                f.write(json.dumps(value, ensure_ascii=False))
 
     def append(self, file_, value, raw=False):
         path = os.path.join(self.path, file_)
@@ -37,7 +37,7 @@ class Storage(object):
             else:
                 # Add newline if file is not empty
                 new_line = '\n' if os.stat(f.name).st_size else ''
-                f.write(new_line + json.dumps(value))
+                f.write(new_line + json.dumps(value, ensure_ascii=False))
 
     @classmethod
     def newFromScript(cls, path):

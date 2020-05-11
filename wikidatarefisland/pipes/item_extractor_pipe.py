@@ -1,7 +1,10 @@
+from functools import reduce
 from itertools import chain
-from .abstract_pipe import AbstractPipe
+
 from wikidatarefisland.data_model import StatementFilterer
+
 from ..data_model.filters import StatementFilters
+from .abstract_pipe import AbstractPipe
 
 
 class ItemExtractorPipe(AbstractPipe):
@@ -22,22 +25,22 @@ class ItemExtractorPipe(AbstractPipe):
     def _process_item(self, item_data):
         # TODO: Filter out bail early if item is in excluded list. see: T251282
         all_statements = list(chain.from_iterable([i for i in item_data['claims'].values()]))
-        result_statements = list(self._filter_potential_referenced_statements(
-            all_statements))
+        result_statements = self._filter_potential_referenced_statements(
+            all_statements)
         resource_urls = list(self._extract_potential_resource_urls(all_statements))
         return [{
             'itemId': item_data['id'],
-            'statements': result_statements,
+            'statements': list(result_statements),
             'resourceUrls': resource_urls
         }]
 
     def _extract_potential_resource_urls(self, all_statements):
         statement_filters = StatementFilters()
 
-        external_id_statements = filter(
+        external_id_statements = list(filter(
             statement_filters.get_property_id_statement_includer(self.whitelisted_ext_ids),
             all_statements
-        )
+        ))
         resource_urls = map(self._format_external_id, external_id_statements)
         return resource_urls
 
@@ -60,19 +63,20 @@ class ItemExtractorPipe(AbstractPipe):
         )
         filtered_statements = potentially_ref_statement_filterer.filter_statements(
             all_statements)
-        result_statements = map(_extract_statement, filtered_statements)
+        result_statements = reduce(_extract_statement, filtered_statements, [])
         return result_statements
 
 
-def _extract_statement(statement):
+def _extract_statement(acc, statement):
     pid = statement.get('mainsnak', {}).get('property')
     datatype = statement.get('mainsnak', {}).get('datatype')
     datavalue = statement.get('mainsnak', {}).get('datavalue', {}).get('value')
 
     if pid is None or datatype is None or datavalue is None:
-        return None
-    return {
+        return acc
+    acc.append({
         'pid': pid,
         'datatype': datatype,
         'value': datavalue
-    }
+    })
+    return acc

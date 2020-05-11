@@ -1,5 +1,6 @@
-import requests
 import os
+
+import requests
 
 from wikidatarefisland import Config
 from wikidatarefisland.pipes import ScraperPipe
@@ -37,21 +38,26 @@ class MockConfig(Config):
 class MockSchemaorgNormalizer():
     @staticmethod
     def normalize_from_extruct(data):
-        return {
+        return [{
             "http://schema.org/director": [
                 data['microdata'][0]['director']['name']
             ],
             "http://schema.org/genre": [
                 data['microdata'][0]['genre']
             ]
-        }
+        }]
+
+
+class MockSession():
+    def __init__(self):
+        self.headers = {}
+
+    def get(self, url, *args, **kwargs):
+        return MockResponse(url)
 
 
 def test_run(monkeypatch):
-    def mock_get(url, *args, **kwargs):
-        return MockResponse(url)
-
-    monkeypatch.setattr(requests, "get", mock_get)
+    monkeypatch.setattr(requests, "Session", MockSession)
     item = {
         'itemId': 'Q42',
         'resourceUrls': [{
@@ -69,8 +75,8 @@ def test_run(monkeypatch):
     }
     scraper = ScraperPipe(MockConfig(), MockSchemaorgNormalizer, MockSchemaorgPropertyMapper())
     result = scraper.flow(item)
-    assert 'dateRetrieved' in result[0]['reference']['referenceMetadata']
     assert len(result) == 1
+    assert 'dateRetrieved' in result[0]['reference']['referenceMetadata']
     del result[0]['reference']['referenceMetadata']['dateRetrieved']
     assert result[0] == {
         'statement': {

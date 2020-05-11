@@ -22,9 +22,9 @@ class WdqsSchemaorgPropertyMapper(SchemaorgPropertyMapper):
         query = """SELECT ?property ?url
 WHERE {
   ?property wdt:P1628 ?url.
-  FILTER(STRSTARTS(str(?url), "http://schema.org")).
+  FILTER(STRSTARTS(str(?url), "http://schema.org") || STRSTARTS(str(?url), "https://schema.org")).
 }"""
         self._mapping = [{
             'property': i['property']['value'].replace('http://www.wikidata.org/entity/', ''),
-            'url': i['url']['value']
+            'url': i['url']['value'].replace('https://schema.org', 'http://schema.org')
         } for i in self.wdqs_reader.get_sparql_data(query)]

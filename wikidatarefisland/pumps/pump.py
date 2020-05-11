@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from wikidatarefisland.data_access import Storage
 from wikidatarefisland.pipes import AbstractPipe
 

@@ -19,7 +19,8 @@ class StatementFilters:
         Method that returns a filter that is false for all statements
         that are any of the passed property ids
         """
-        return lambda statement: statement.get('pid', '') not in excluded_properties
+        return lambda statement: statement.get('mainsnak', {}).get('property', '') \
+            not in excluded_properties
 
     @staticmethod
     def get_property_id_statement_includer(included_properties):
@@ -27,4 +28,5 @@ class StatementFilters:
         Method that returns a filter that is true for all statements
         that are any of the passed property ids
         """
-        return lambda statement: statement.get('pid', '') in included_properties
+        return lambda statement: statement.get('mainsnak', {}).get('property', '') \
+            in included_properties

@@ -1,4 +1,5 @@
 from functools import reduce
+
 from pyld import jsonld
 
 
@@ -25,7 +26,8 @@ class SchemaOrgNode:
         return self._get_value(leaf)
 
     def get_props(self):
-        return dict(map(lambda kvPair: (kvPair[0], self.get_prop(kvPair[0])), self._props.items()))
+        return dict(map(lambda kvPair: (kvPair[0].replace('https://', 'http://'),
+                                        self.get_prop(kvPair[0])), self._props.items()))
 
     def has_props(self):
         return len(self._props) > 0

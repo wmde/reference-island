@@ -1,11 +1,12 @@
 import pytest
+
 from wikidatarefisland.data_model import StatementFilters
 
-mock_reference_having_statement = {'pid': 'P1', 'references': [{'foo': 'bar'}]}
-mock_reference_missing_statement = {'pid': 'P1'}
-mock_external_id_statement = {'pid': 'P2', 'mainsnak': {'datatype': 'external-id'}}
-mock_p1_statement = {'pid': 'P1'}
-mock_p2_statement = {'pid': 'P2'}
+mock_reference_having_statement = {'mainsnak': {'property': 'P1'}, 'references': [{'foo': 'bar'}]}
+mock_reference_missing_statement = {'mainsnak': {'property': 'P1'}}
+mock_external_id_statement = {'mainsnak': {'property': 'P2', 'datatype': 'external-id'}}
+mock_p1_statement = {'mainsnak': {'property': 'P1'}}
+mock_p2_statement = {'mainsnak': {'property': 'P2'}}
 
 
 @pytest.fixture

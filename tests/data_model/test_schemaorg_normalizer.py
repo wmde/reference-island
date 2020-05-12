@@ -6,7 +6,7 @@ from wikidatarefisland.data_model.schemaorg_normalizer import (
 
 
 class MockSchemaOrgNode:
-    def get_props(self):
+    def get_props(self, *args):
         return {"test": "mock"}
 
 
@@ -315,6 +315,60 @@ class TestSchemaOrgGraph:
         result = SchemaOrgGraph(given).to_jsonld()
 
         assert result == expected, "Should extract graphs"
+
+    def test_get_nodes_self_referring(self):
+        given = [{
+            "@id": "_:b0",
+            "http://schema.org/name": [
+                {
+                    "@id": "_:b0"
+                }
+            ]
+        }]
+        expected = {'http://schema.org/name': ["_:b0"]}
+        result = SchemaOrgGraph(given).get_nodes()
+
+        assert result == [expected]
+
+    def test_get_nodes_circular_referring(self):
+        given = [
+            {
+                "@id": "http://example.com/eltonId",
+                "@type": "Person",
+                "http://schema.org/name": {"@value": "Elton John"},
+                "http://schema.org/additionalName": {"@id": "http://example.com/reginaldId"}
+            },
+            {
+                "@id": "http://example.com/reginaldId",
+                "@type": "Person",
+                "http://schema.org/name": {"@value": "Reginald Dwight"},
+                "http://schema.org/additionalName": {"@id": "http://example.com/eltonId"}
+            }
+        ]
+
+        expected = [
+            {
+                "http://schema.org/additionalName": [
+                    {
+                        "http://schema.org/name": ["Reginald Dwight"],
+                        "http://schema.org/additionalName": ["http://example.com/eltonId"]
+                    }
+                ],
+                "http://schema.org/name": ["Elton John"]
+            },
+            {
+                "http://schema.org/additionalName": [
+                    {
+                        "http://schema.org/name": ["Elton John"],
+                        "http://schema.org/additionalName": ["http://example.com/reginaldId"]
+                    }
+                ],
+                "http://schema.org/name": ["Reginald Dwight"]
+            }
+        ]
+
+        result = SchemaOrgGraph(given).get_nodes()
+        assert result == expected
 
 
 class TestSchemaOrgNormalizer:

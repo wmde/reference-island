@@ -10,24 +10,30 @@ class SchemaOrgNode:
         self._type = data["@type"] if "@type" in data else None
         self._props = dict(filter(lambda kvPair: "schema.org" in kvPair[0], data.items()))
 
-    def _get_value(self, leaf):
-        if "@id" in leaf:
-            id = leaf["@id"]
-            return self._graph.get_node(id).get_props() if self._graph.has_node(id) else id
+    def _get_value(self, leaf, max_depth):
+        if "@value" in leaf:
+            return leaf["@value"]
 
-        return leaf["@value"]
+        id = leaf["@id"]
 
-    def get_prop(self, propName):
+        if id == self.id or max_depth == 0:
+            return id
+
+        return self._graph.get_node(id).get_props(max_depth - 1) if self._graph.has_node(id) else id
+
+    def get_prop(self, propName, max_depth=1):
         leaf = self._props[propName]
 
         if isinstance(leaf, list):
-            return list(map(lambda item: self._get_value(item), leaf))
+            return list(map(lambda item: self._get_value(item, max_depth), leaf))
 
-        return self._get_value(leaf)
+        return self._get_value(leaf, max_depth)
 
-    def get_props(self):
-        return dict(map(lambda kvPair: (kvPair[0].replace('https://', 'http://'),
-                                        self.get_prop(kvPair[0])), self._props.items()))
+    def get_props(self, max_depth=1):
+        return dict(map(
+            lambda kvPair: (kvPair[0].replace('https://', 'http://'),
+                    self.get_prop(kvPair[0], max_depth)),
+                    self._props.items()))
 
     def has_props(self):
         return len(self._props) > 0

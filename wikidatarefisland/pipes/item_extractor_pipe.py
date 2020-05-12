@@ -25,12 +25,16 @@ class ItemExtractorPipe(AbstractPipe):
     def _process_item(self, item_data):
         # TODO: Filter out bail early if item is in excluded list. see: T251282
         all_statements = list(chain.from_iterable([i for i in item_data['claims'].values()]))
-        result_statements = self._filter_potential_referenced_statements(
-            all_statements)
+        result_statements = list(self._filter_potential_referenced_statements(
+            all_statements))
         resource_urls = list(self._extract_potential_resource_urls(all_statements))
+
+        if not result_statements or not resource_urls:
+            return []
+
         return [{
             'itemId': item_data['id'],
-            'statements': list(result_statements),
+            'statements': result_statements,
             'resourceUrls': resource_urls
         }]
 

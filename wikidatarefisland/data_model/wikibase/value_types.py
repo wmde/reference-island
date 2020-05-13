@@ -65,7 +65,6 @@ class DateTimeValue:
 
         try:
             compare = isoparse(compare_string)
-            date = isoparse(self.value)
         except ValueError:
             return False
 
@@ -73,9 +72,11 @@ class DateTimeValue:
             return False
 
         # 9 - Year Precision
-        if self.precision == '9':
+        if self.precision == 9:
+            date = isoparse(self.value[:4])
             return date.year == compare.year
 
+        date = isoparse(self.value)
         return date.year == compare.year \
             and date.month == compare.month \
             and date.day == compare.day

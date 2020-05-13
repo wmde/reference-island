@@ -25,21 +25,21 @@ mock = {
                 "datatype": 'time',
                 "value": {
                     "time": '+1986-05-04T00:00:00Z',
-                    "precision": '11'
+                    "precision": 11
                 }
             },
             "month_precision": {
                 "datatype": 'time',
                 "value": {
                     "time": '+1986-05-04T00:00:00Z',
-                    "precision": '10'
+                    "precision": 10
                 }
             },
             "year_precision": {
                 "datatype": 'time',
                 "value": {
                     "time": '+1986-05-04T00:00:00Z',
-                    "precision": '9'
+                    "precision": 9
                 }
             }
         },

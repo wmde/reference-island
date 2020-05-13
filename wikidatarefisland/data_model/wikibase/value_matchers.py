@@ -69,7 +69,7 @@ class ValueMatchers:
         value = DateTimeValue(statement)
 
         # 11 - Day Precision, 9 - Year precision
-        if value.precision != '11' and value.precision != '9':
+        if value.precision != 11 and value.precision != 9:
             return False  # Skipping other precisions as per T250916
 
         reference = statement_reference["reference"]

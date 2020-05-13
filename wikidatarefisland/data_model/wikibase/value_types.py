@@ -53,7 +53,7 @@ class DateTimeValue:
         self.type = statement["datatype"]
         self.sign = statement["value"]["time"][0]
         self.value = statement["value"]["time"][1:]
-        self.precision = statement["value"]["precision"]
+        self.precision = int(statement["value"]["precision"])
 
     def __eq__(self, other):
         if not isinstance(other, str):

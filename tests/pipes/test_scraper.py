@@ -33,6 +33,8 @@ class MockConfig(Config):
             return 'Test'
         if key == 'parallel_workers':
             return 20
+        if key == 'reference_url_property':
+            return 'P854'
 
 
 class MockSchemaorgNormalizer():
@@ -84,5 +86,7 @@ def test_run(monkeypatch):
             'datatype': 'wikibase-item',
             'value': {'numeric-id': 214917, 'id': 'Q214917'}},
         'itemId': 'Q42',
-        'reference': {'referenceMetadata': {'a': 'b'},
-                      'extractedData': ['James Cameron']}}
+        'reference': {'referenceMetadata': {
+            'a': 'b',
+            'P854': 'https://example_with_schema.org/wow'},
+            'extractedData': ['James Cameron']}}

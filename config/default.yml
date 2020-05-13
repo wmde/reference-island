@@ -105,6 +105,9 @@ blacklisted_external_identifiers:
     - P6578
     - P1004
 
+reference_url_property:
+        'P854'
+
 data_storage_path:
     'data/'
 

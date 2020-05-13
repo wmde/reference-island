@@ -80,11 +80,13 @@ class ScraperPipe(AbstractPipe):
                         statement,
                         item['itemId'],
                         resourceUrls[url],
-                        datum[schema_property])
+                        datum[schema_property],
+                        url)
                     final_data.append(formatted)
         return final_data
 
-    def _format_result(self, statement, item_id, metadata, extracted_data):
+    def _format_result(self, statement, item_id, metadata, extracted_data, url):
+        metadata[self.config.get('reference_url_property')] = url
         return {
             'statement': statement,
             'itemId': item_id,

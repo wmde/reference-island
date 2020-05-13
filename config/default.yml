@@ -119,3 +119,10 @@ wdqs_url:
 
 parallel_workers:
     20
+
+# Minimum number of repetitions of item and its value to be considered the same
+minimum_repetitions_for_item_values:
+    3
+# Maximum noise ratio in item value. This should never be more than 0.5
+maximum_noise_ratio_for_item_values:
+    0.2

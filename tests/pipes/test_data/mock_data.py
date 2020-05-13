@@ -43,7 +43,20 @@ LINE = {
     "statements": [],
     "resourceUrls": []
 }
+REFERENCE_LINE = {
+    'statement': {},
+    'itemId': ITEM_ID,
+    'reference': {'referenceMetadata': {},
+                  'extractedData': []}}
 
+EXAMPLE_LINE = {
+    **REFERENCE_LINE,
+    'statement': STATEMENT_BLOB,
+    'reference': {
+        'referenceMetadata': {WHITELISTED_EXT_ID: 'fooid'},
+        'extractedData': ['foo', 'bar']
+    }
+}
 mock = {
     "claim": {
         "with_references": {

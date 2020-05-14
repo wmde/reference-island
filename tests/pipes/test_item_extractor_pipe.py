@@ -5,6 +5,17 @@ from .test_data import mock_data as test_data
 
 given = {
     "item": {
+        "without_non_ignored_references": {
+            **test_data.ITEM,
+            "claims": {
+                test_data.NON_BLACKLISTED_PROPERTY: [
+                    test_data.mock["claim"]["with_ignored_references_only"]
+                ],
+                test_data.WHITELISTED_EXT_ID: [
+                    test_data.mock["claim"]["with_whitelisted_external_id"]
+                ]
+            }
+        },
         "without_unreferenced_claims": {
             **test_data.ITEM,
             "claims": {
@@ -64,6 +75,7 @@ class MockExternalIdFormatter:
 
 class TestItemExtractorPipe:
     @pytest.mark.parametrize("given,expected", [
+        (given["item"]["without_non_ignored_references"], [expected["line"]["with_all"]]),
         (given["item"]["without_unreferenced_claims"], []),
         (given["item"]["without_non_blacklisted_properties"], []),
         (given["item"]["without_whitelisted_external_ids"], []),
@@ -73,6 +85,12 @@ class TestItemExtractorPipe:
         external_id_formatter = MockExternalIdFormatter()
         blacklisted_properties = [test_data.BLACKLISTED_PROPERTY]
         whitelisted_ext_ids = [test_data.WHITELISTED_EXT_ID]
-        pipe = ItemExtractorPipe(external_id_formatter, blacklisted_properties, whitelisted_ext_ids)
+        imported_from_properties = [test_data.IGNORED_REFERENCE_PROPERTY]
+
+        pipe = ItemExtractorPipe(
+            external_id_formatter,
+            blacklisted_properties,
+            whitelisted_ext_ids,
+            imported_from_properties)
 
         assert pipe.flow(given) == expected

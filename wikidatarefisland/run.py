@@ -50,7 +50,8 @@ def main(argv, filepath):
         item_extractor = pipes.ItemExtractorPipe(
             external_identifier_formatter,
             config.get('blacklisted_properties'),
-            whitelisted_ext_ids
+            whitelisted_ext_ids,
+            config.get('ignored_reference_properties')
         )
         simple_pump.run(item_extractor, args.input_path, args.output_path)
 

@@ -105,6 +105,10 @@ blacklisted_external_identifiers:
     - P6578
     - P1004
 
+ignored_reference_properties:
+    - P143
+    - P4656
+
 reference_url_property:
         'P854'
 

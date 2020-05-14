@@ -1,3 +1,4 @@
+IGNORED_REFERENCE_PROPERTY = "P143"
 WHITELISTED_EXT_ID = "P3029"
 EXTERNAL_ID_VALUE = "tst1234"
 NON_WHITELISTED_EXT_ID = "P3028"
@@ -59,11 +60,32 @@ EXAMPLE_LINE = {
 }
 mock = {
     "claim": {
+        "with_ignored_references_only": {
+            "mainsnak": {
+                "property": NON_BLACKLISTED_PROPERTY,
+                "datavalue": {
+                    "value": VALUE_BLOB
+                },
+                "datatype": DATATYPE
+            },
+            "references": [
+                {
+                    "snaks": {IGNORED_REFERENCE_PROPERTY: "bar"}
+                }
+            ]
+        },
         "with_references": {
             "mainsnak": {
                 "property": NON_BLACKLISTED_PROPERTY
             },
-            "references": []
+            "references": [
+                {
+                    "snaks": {
+                        "foo": "bar",
+                        IGNORED_REFERENCE_PROPERTY: "bar"
+                    }
+                }
+            ]
         },
         "with_any_external_id": {
             "mainsnak": {

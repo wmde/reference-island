@@ -49,6 +49,9 @@ function getReferenceSnak($reference) {
             // We skip url for references given in the game: T251262#6096951
             continue;
         }
+        if ($pid == 'dateRetrieved') {
+            continue;
+        }
         if ($pid == 'P813') {
             // Time data type
             $dataValue = [
@@ -87,10 +90,14 @@ function getReferenceSnak($reference) {
 }
 
 function getTextForUsers($data) {
+    $values = [];
+    foreach ( $data["reference"]["extractedData"]  as $value ) {
+        $values[] = json_encode( $value );
+    }
     return "Is the value for this claim and the value given in the reference the same?\nProperty: " . $data["statement"]["pid"] .
         "\nValue of the statement: " . json_encode($data["statement"]["value"]) .
         "\nURL reference: " . $data["reference"]["referenceMetadata"]["P854"] .
-        "\nValue given in the reference: " . json_encode($data["reference"]["extractedData"]);
+        "\nValues given in the reference: \n* " . implode("\n* ", $values);
 }
 
 function getTiles() {
@@ -110,7 +117,7 @@ function getTiles() {
             'action' => 'wbsetreference',
             'statement' => $guid,
             'tags' => 'reference-game',
-            'snaks' => getReferenceSnak($data['reference']['referenceMetadata']),
+            'snaks' => json_encode(getReferenceSnak($data['reference']['referenceMetadata'])),
         ];
         $tile = [
             'id' => (int)$row['ref_id'],
@@ -118,11 +125,14 @@ function getTiles() {
             'controls' => []
         ];
         $tile['sections'][] = ['type' => 'item', 'q' => $data['itemId']];
+        if ( $data['statement']['datatype'] == 'wikibase-item' ) {
+            $tile['sections'][] = ['type' => 'item', 'q' => $data['statement']['value']['id']];
+        }
         $tile['sections'][] = [
             'type' => 'text',
             'title' => 'Possible reference',
             'text' => getTextForUsers($data),
-            'url' => $data['reference']['referenceMetadata']['referenceUrl']
+            'url' => $data['reference']['referenceMetadata']['P854']
         ];
         $tile['controls'][] = [
             'type' => 'buttons',

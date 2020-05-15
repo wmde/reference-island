@@ -19,7 +19,7 @@ function backupTable($dbhost, $dbname) {
 
 $db = getDb($dbhost, $dbname);
 $file_path = getenv('REFS_PATH');
-$data = json_decode(file_get_contents($file_path), true);
+$data = explode( "\n", file_get_contents($file_path) );
 backupTable($dbhost, $dbname);
 $db->query("TRUNCATE TABLE refs;")->execute();
 $sql = "INSERT INTO refs (ref_data) VALUES (?)";
@@ -29,6 +29,6 @@ foreach ($data as $row) {
     // PHP PDO doesn't have an easy way to batch multiple rows in insert
     // TODO: This is okay for 300 cases but for more cases,
     //   we need to write a query builder for the inserts
-    $stmt->execute([json_encode($row)]);
+    $stmt->execute([$row]);
 }
 $db->commit();

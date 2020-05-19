@@ -1,7 +1,8 @@
 <?PHP
 // This is a POC, don't judge
 function getDb() {
-    $dbmycnf = parse_ini_file("../replica.my.cnf");
+    $server_root = $_SERVER['DOCUMENT_ROOT'];
+    $dbmycnf = parse_ini_file($server_root . "../replica.my.cnf");
     $dbuser = $dbmycnf['user'];
     $dbpass = $dbmycnf['password'];
     $dbhost = "tools.db.svc.eqiad.wmflabs";
@@ -107,44 +108,61 @@ function getTiles() {
     $result = $db->query($sql);
     $result = $result->fetchAll();
     $output = [];
-    foreach ($result as $row) {
-        $data = json_decode($row['ref_data'], true);
-        $guid = getGuid($data['statement'], $data['itemId']);
-        if (!$guid) {
-            continue;
-        }
-        $refApi = [
-            'action' => 'wbsetreference',
-            'statement' => $guid,
-            'tags' => 'reference-game',
-            'snaks' => json_encode(getReferenceSnak($data['reference']['referenceMetadata'])),
-        ];
-        $tile = [
-            'id' => (int)$row['ref_id'],
-            'sections' => [],
-            'controls' => []
-        ];
-        $tile['sections'][] = ['type' => 'item', 'q' => $data['itemId']];
-        if ( $data['statement']['datatype'] == 'wikibase-item' ) {
-            $tile['sections'][] = ['type' => 'item', 'q' => $data['statement']['value']['id']];
-        }
-        $tile['sections'][] = [
-            'type' => 'text',
-            'title' => 'Possible reference',
-            'text' => getTextForUsers($data),
-            'url' => $data['reference']['referenceMetadata']['P854']
-        ];
-        $tile['controls'][] = [
-            'type' => 'buttons',
-            'entries' => [
-                ['type' => 'green', 'decision' => 'accept', 'label' => 'Accept', 'api_action' => $refApi],
-                ['type' => 'white', 'decision' => 'skip', 'label' => 'Skip'],
-                ['type' => 'blue', 'decision' => 'reject', 'label' => 'Reject']
-            ]
-        ];
+    /**
+     * Under construction message, will be remove when ui is finished
+     **/
+    $tile = [
+       'id' => 0,
+       'sections' => [[
+          'type' => 'text',
+          'title' => 'Coming Soon!',
+          'text' => 'This game is still under development, please stay tuned and visit us again soon.'
+       ]],
+       'controls' => []
+    ];
 
-        $output[] = $tile;
-    }
+    $output[] = $tile;
+    /**
+     * Commented out until the game UI is ready
+     **/
+    //foreach ($result as $row) {
+    //    $data = json_decode($row['ref_data'], true);
+    //    $guid = getGuid($data['statement'], $data['itemId']);
+    //    if (!$guid) {
+    //        continue;
+    //    }
+    //    $refApi = [
+    //        'action' => 'wbsetreference',
+    //        'statement' => $guid,
+    //        'tags' => 'reference-game',
+    //        'snaks' => json_encode(getReferenceSnak($data['reference']['referenceMetadata'])),
+    //    ];
+    //    $tile = [
+    //        'id' => (int)$row['ref_id'],
+    //        'sections' => [],
+    //        'controls' => []
+    //    ];
+    //    $tile['sections'][] = ['type' => 'item', 'q' => $data['itemId']];
+    //    if ( $data['statement']['datatype'] == 'wikibase-item' ) {
+    //        $tile['sections'][] = ['type' => 'item', 'q' => $data['statement']['value']['id']];
+    //    }
+    //    $tile['sections'][] = [
+    //        'type' => 'text',
+    //        'title' => 'Possible reference',
+    //        'text' => getTextForUsers($data),
+    //        'url' => $data['reference']['referenceMetadata']['P854']
+    //    ];
+    //    $tile['controls'][] = [
+    //        'type' => 'buttons',
+    //        'entries' => [
+    //            ['type' => 'green', 'decision' => 'accept', 'label' => 'Accept', 'api_action' => $refApi],
+    //            ['type' => 'white', 'decision' => 'skip', 'label' => 'Skip'],
+    //            ['type' => 'blue', 'decision' => 'reject', 'label' => 'Reject']
+    //        ]
+    //    ];
+    //
+    //    $output[] = $tile;
+    //}
 
     return $output;
 }

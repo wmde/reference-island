@@ -36,3 +36,11 @@ For each part of the pipeline, add name of the file as argument to make (for mor
  - `make data/matched_references.jsonl` runs pipe3
  - `make data/matched_item_references.jsonl` runs pipe4
  - `make` or `make data/references.jsonl` runs and merges pipe3 and pipe4
+
+
+ ## Making Changes to the wikidata game
+
+1. Make sure to prefix your branch name with `game-` otherwise automatic deployment and staging would not work
+1. Once you would like to preview your changes, create a WIP pull request to this repository. This will create a staged api version from your branch.
+1. To preview your changes go to `https://tools.wmflabs.org/wd-ref-island/test.php?branch=<your branch name>` to see a live test of the game on your branch.
+1. Once your pull request is merged, the game will be automatically deployed to https://tools.wmflabs.org/wikidata-game/distributed/#game=73 .

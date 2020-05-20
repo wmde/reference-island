@@ -19,7 +19,7 @@ function backupTable($dbhost, $dbname) {
 
 $db = getDb($dbhost, $dbname);
 $file_path = getenv('REFS_PATH');
-$data = explode( "\n", file_get_contents($file_path) );
+$data = json_decode(file_get_contents($file_path), true);
 backupTable($dbhost, $dbname);
 $db->query("TRUNCATE TABLE refs;")->execute();
 $sql = "INSERT INTO refs (ref_data) VALUES (?)";

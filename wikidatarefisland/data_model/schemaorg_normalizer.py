@@ -1,5 +1,4 @@
 from functools import reduce
-
 from pyld import jsonld
 
 
@@ -51,8 +50,10 @@ class SchemaOrgNode:
 
 
 class SchemaOrgGraph:
-    def __init__(self, data):
-        flattened = jsonld.flatten(data)
+    def __init__(self, data, document_loader):
+        if document_loader is None:
+            raise Exception('document_loader should be set')
+        flattened = jsonld.flatten(data, None, {'documentLoader': document_loader})
 
         self._nodes = reduce(self._reduce_nodes, flattened, {})
 
@@ -87,10 +88,11 @@ class SchemaOrgGraph:
 
 
 class SchemaOrgNormalizer:
+    def __init__(self, document_loader):
+        self.documentLoader = document_loader
 
-    @staticmethod
-    def normalize_from_extruct(data):
+    def normalize_from_extruct(self, data):
         scrapedList = reduce(lambda acc, arg: acc + arg, data.values())
-        graph = SchemaOrgGraph(scrapedList)
+        graph = SchemaOrgGraph(scrapedList, self.documentLoader)
 
         return graph.get_nodes()

@@ -1,5 +1,8 @@
+import json
+
 import pytest
 
+from wikidatarefisland.data_access.offline_document_loader import OfflineDocumentLoader
 from wikidatarefisland.data_model.schemaorg_normalizer import (
     SchemaOrgGraph, SchemaOrgNode, SchemaOrgNormalizer)
 
@@ -7,6 +10,15 @@ from wikidatarefisland.data_model.schemaorg_normalizer import (
 class MockSchemaOrgNode:
     def get_props(self, *args):
         return {"test": "mock"}
+
+
+@pytest.fixture
+def document_loader():
+    import os
+    script_path = os.path.dirname(os.path.realpath(__file__))
+    with open(os.path.join(script_path, 'mock_data', 'jsonldcontext.jsonld')) as f:
+        schema_context = json.load(f)
+    return OfflineDocumentLoader(schema_context)
 
 
 class TestSchemaOrgNode:
@@ -39,12 +51,12 @@ class TestSchemaOrgNode:
 
         assert result == expected, "Should get list of values"
 
-    def test_get_prop_id(self, monkeypatch):
+    def test_get_prop_id(self, monkeypatch, document_loader):
         def mock_hasNode(*args):
             return False
 
         monkeypatch.setattr(SchemaOrgGraph, "has_node", mock_hasNode)
-        graph = SchemaOrgGraph([])
+        graph = SchemaOrgGraph([], document_loader)
 
         given = {
             "@id": "123",
@@ -60,7 +72,7 @@ class TestSchemaOrgNode:
 
         assert result == expected, "Should get id value if no node is found"
 
-    def test_get_prop_node(self, monkeypatch):
+    def test_get_prop_node(self, monkeypatch, document_loader):
         def mock_has_node(*args):
             return True
 
@@ -69,7 +81,7 @@ class TestSchemaOrgNode:
 
         monkeypatch.setattr(SchemaOrgGraph, "has_node", mock_has_node)
         monkeypatch.setattr(SchemaOrgGraph, "get_node", mock_get_node)
-        graph = SchemaOrgGraph([])
+        graph = SchemaOrgGraph([], document_loader)
 
         given = {
             "@id": "http://example.com/123",
@@ -149,7 +161,7 @@ class TestSchemaOrgNode:
 
 
 class TestSchemaOrgGraph:
-    def test_get_node(self, monkeypatch):
+    def test_get_node(self, monkeypatch, document_loader):
         def mock_eq(self, other):
             if isinstance(self, other.__class__):
                 return self.id == other.id and self._props == other._props
@@ -164,13 +176,13 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).get_node("http://example.com/123")
+        result = SchemaOrgGraph(given, document_loader).get_node("http://example.com/123")
 
         expected = SchemaOrgNode(given[0], None)
 
         assert result == expected, "Should get a node by it's id"
 
-    def test_has_node(self):
+    def test_has_node(self, document_loader):
         given = [
             {
                 "@id": "http://example.com/123",
@@ -178,11 +190,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).has_node("http://example.com/123")
+        result = SchemaOrgGraph(given, document_loader).has_node("http://example.com/123")
 
         assert result is True, "Should return true if node exists"
 
-    def test_has_node_no_node(self):
+    def test_has_node_no_node(self, document_loader):
         given = [
             {
                 "@id": "http://example.com/123",
@@ -190,11 +202,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).has_node("123")
+        result = SchemaOrgGraph(given, document_loader).has_node("123")
 
         assert result is False, "Should return false if node doesn't exist"
 
-    def test_get_nodes(self):
+    def test_get_nodes(self, document_loader):
         given = [
             {
                 "@id": "http://example.com/123",
@@ -208,11 +220,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).get_nodes()
+        result = SchemaOrgGraph(given, document_loader).get_nodes()
 
         assert result == expected, "Should get the nodes' properties"
 
-    def test_get_nodes_nested(self):
+    def test_get_nodes_nested(self, document_loader):
         given = [
             {
                 "@id": "http://example.com/123",
@@ -242,11 +254,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).get_nodes()
+        result = SchemaOrgGraph(given, document_loader).get_nodes()
 
         assert result == expected, "Should include nested nodes"
 
-    def test_get_nodes_graph_child(self):
+    def test_get_nodes_graph_child(self, document_loader):
         given = [
             {
                 "@graph": [
@@ -266,11 +278,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).get_nodes()
+        result = SchemaOrgGraph(given, document_loader).get_nodes()
 
         assert result == expected, "Should extract nested graphs"
 
-    def test_to_jsonld(self):
+    def test_to_jsonld(self, document_loader):
         given = [
             {
                 "@id": "http://example.com/123",
@@ -286,11 +298,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).to_jsonld()
+        result = SchemaOrgGraph(given, document_loader).to_jsonld()
 
         assert result == given, "Should return flattened expanded json-ld format"
 
-    def test_to_jsonld_graph_child(self):
+    def test_to_jsonld_graph_child(self, document_loader):
         given = [
             {
                 "@graph": [
@@ -311,11 +323,11 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).to_jsonld()
+        result = SchemaOrgGraph(given, document_loader).to_jsonld()
 
         assert result == expected, "Should extract graphs"
 
-    def test_get_nodes_self_referring(self):
+    def test_get_nodes_self_referring(self, document_loader):
         given = [{
             "@id": "_:b0",
             "http://schema.org/name": [
@@ -325,11 +337,11 @@ class TestSchemaOrgGraph:
             ]
         }]
         expected = {'http://schema.org/name': ["_:b0"]}
-        result = SchemaOrgGraph(given).get_nodes()
+        result = SchemaOrgGraph(given, document_loader).get_nodes()
 
         assert result == [expected]
 
-    def test_get_nodes_circular_referring(self):
+    def test_get_nodes_circular_referring(self, document_loader):
         given = [
             {
                 "@id": "http://example.com/eltonId",
@@ -366,13 +378,43 @@ class TestSchemaOrgGraph:
             }
         ]
 
-        result = SchemaOrgGraph(given).get_nodes()
+        result = SchemaOrgGraph(given, document_loader).get_nodes()
         assert result == expected
 
 
-@pytest.mark.skip  # FIXME: skip failing tests due to now broken schema.org homepage
+@pytest.fixture
+def normalizer(document_loader):
+    return SchemaOrgNormalizer(document_loader.get_loader)
+
+
 class TestSchemaOrgNormalizer:
-    def test_normalize_from_extruct(self):
+    def test_normamaize_form_extruct_not_schema_org(self, normalizer):
+        given = {
+            'some_key': [
+                {
+                    "@context": "http://schema-cat-not-real-hat.org",
+                    "@id": "http://example.com/123",
+                    "name": [{"@value": "test"}],
+                    "additionalName": [{
+                        "@id": "http://example.com/124"
+                    }]
+                },
+                {
+                    "@context": "http://schema-cat-not-real-hat.org",
+                    "@id": "http://example.com/124",
+                    "firstName": [{"@value": "Lola"}],
+                    "lastName": [{"@value": "Showgirl"}]
+                }
+            ]
+        }
+
+        expected = []
+
+        result = normalizer.normalize_from_extruct(given)
+
+        assert result == expected, "Should normalize nested compacted data"
+
+    def test_normalize_from_extruct(self, normalizer):
         given = {
             'some_key': [
                 {
@@ -406,11 +448,11 @@ class TestSchemaOrgNormalizer:
             }
         ]
 
-        result = SchemaOrgNormalizer.normalize_from_extruct(given)
+        result = normalizer.normalize_from_extruct(given)
 
         assert result == expected, "Should normalize nested compacted data"
 
-    def test_normalize_from_extruct_multiple(self):
+    def test_normalize_from_extruct_multiple(self, normalizer):
         given = {
             'some_key': [
                 {
@@ -453,6 +495,6 @@ class TestSchemaOrgNormalizer:
             }
         ]
 
-        result = SchemaOrgNormalizer.normalize_from_extruct(given)
+        result = normalizer.normalize_from_extruct(given)
 
         assert result == expected, "Should normalize from multiple sources"

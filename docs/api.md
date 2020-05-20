@@ -230,3 +230,9 @@ The output format is an object with the following properties:
       }
   }
    ```
+
+  # SS5: Download schema.org json-ld context
+ This services downloads the schame.org json-ld context. Until 2020-05-19 it was possible for pyld to automatically
+ obtain it through content-negotiation of `http://schema.org` but this broke.
+
+ This side-service has a backup method to get the context from the schema.org docs

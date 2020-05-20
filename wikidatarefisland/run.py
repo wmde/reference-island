@@ -4,6 +4,8 @@ import sys
 
 from wikidatarefisland import (Config, data_access, data_model,
                                external_identifiers, pipes, pumps, services)
+from wikidatarefisland.data_access import SchemaContextDownloader
+from wikidatarefisland.data_access.offline_document_loader import OfflineDocumentLoader
 from wikidatarefisland.data_model import wikibase
 
 
@@ -31,7 +33,6 @@ def main(argv, filepath):
     storage = data_access.Storage.newFromScript(file_path)
     external_identifier_formatter = services.WdqsExternalIdentifierFormatter(wdqs_reader)
     schemaorg_mapper = services.WdqsSchemaorgPropertyMapper(wdqs_reader)
-    schemaorg_normalizer = data_model.SchemaOrgNormalizer
 
     # Pumps
     simple_pump = pumps.SimplePump(storage)
@@ -55,6 +56,9 @@ def main(argv, filepath):
         simple_pump.run(item_extractor, args.input_path, args.output_path)
 
     if 'scrape' == args.step:
+        schema_context = storage.get(args.side_service_input_path)
+        document_loader = OfflineDocumentLoader(schema_context)
+        schemaorg_normalizer = data_model.SchemaOrgNormalizer(document_loader.get_loader)
         the_scraper = pipes.ScraperPipe(config, schemaorg_normalizer, schemaorg_mapper)
         simple_pump.run(the_scraper, args.input_path, args.output_path)
         return
@@ -77,6 +81,9 @@ def main(argv, filepath):
         matching_pipe = pipes.ItemMappingMatcherPipe(mapping, whitelisted_ext_ids)
         simple_pump.run(matching_pipe, args.input_path, args.output_path)
         return
+
+    if 'fetch_schema_ctx' == args.step:
+        storage.store(args.output_path, SchemaContextDownloader.download(config.get('user_agent')))
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 import pytest
+
 from wikidatarefisland.data_model import statement_filterer
 
 mock_statement = {"pid": "P1"}

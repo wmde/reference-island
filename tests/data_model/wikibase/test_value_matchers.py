@@ -1,8 +1,7 @@
 import pytest
 
-from wikidatarefisland.data_model.wikibase.value_matchers import ValueMatchers
-
 from mock_data import mock
+from wikidatarefisland.data_model.wikibase.value_matchers import ValueMatchers
 
 given = {
     "no_type": {

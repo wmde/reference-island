@@ -2,10 +2,8 @@ import argparse
 import os
 import sys
 
-from wikidatarefisland import (Config, data_access, data_model, external_identifiers, pipes,
-                               services)
-
-from wikidatarefisland import pumps
+from wikidatarefisland import (Config, data_access, data_model,
+                               external_identifiers, pipes, pumps, services)
 from wikidatarefisland.data_model import wikibase
 
 
@@ -51,6 +49,7 @@ def main(argv, filepath):
             external_identifier_formatter,
             config.get('blacklisted_properties'),
             whitelisted_ext_ids,
+            config.get('blacklisted_item_classes'),
             config.get('ignored_reference_properties')
         )
         simple_pump.run(item_extractor, args.input_path, args.output_path)

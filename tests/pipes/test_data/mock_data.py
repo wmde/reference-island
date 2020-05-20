@@ -5,12 +5,21 @@ NON_WHITELISTED_EXT_ID = "P3028"
 ITEM_ID = "Q23"
 BLACKLISTED_PROPERTY = "P26"
 NON_BLACKLISTED_PROPERTY = "P509"
+BLACKLISTED_CLASS = "Q987"
+BLACKLISTED_CLASS_INT_ID = 987
+INSTANCE_OF_PROPERTY = "P31"
 DATATYPE = "wikibase-item"
 
 VALUE_BLOB = {
     "entity-type": "item",
     "numeric-id": 191789,
     "id": "Q191789"
+}
+
+BLACKLISTED_CLASS_VALUE_BLOB = {
+    "entity-type": "item",
+    "numeric-id": BLACKLISTED_CLASS_INT_ID,
+    "id": BLACKLISTED_CLASS
 }
 
 STATEMENT_BLOB = {
@@ -107,6 +116,15 @@ mock = {
                 "property": NON_BLACKLISTED_PROPERTY,
                 "datavalue": {
                     "value": VALUE_BLOB
+                },
+                "datatype": DATATYPE
+            }
+        },
+        "with_blacklisted_class": {
+            "mainsnak": {
+                "property": INSTANCE_OF_PROPERTY,
+                "datavalue": {
+                    "value": BLACKLISTED_CLASS_VALUE_BLOB
                 },
                 "datatype": DATATYPE
             }

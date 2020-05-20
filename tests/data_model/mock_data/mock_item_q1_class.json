@@ -1,0 +1,29 @@
+{
+    "id": "Q23",
+    "labels": {},
+    "descriptions": {},
+    "aliases": {},
+    "claims": {
+        "P31": [
+            {
+                "mainsnak": {
+                    "snaktype": "value",
+                    "property": "P31",
+                    "datavalue": {
+                        "value": {
+                            "entity-type": "item",
+                            "numeric-id": 1,
+                            "id": "Q1"
+                        },
+                        "type": "wikibase-entityid"
+                    },
+                    "datatype": "wikibase-item"
+                },
+                "type": "statement",
+                "id": "Q23$041e45df-45c4-d094-293c-5bb349915991",
+                "rank": "preferred"
+            }
+        ]
+    },
+    "sitelinks": {}
+}

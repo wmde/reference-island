@@ -1,5 +1,5 @@
 from .value_matchers import ValueMatchers
-from .value_types import TextValue, QuantityValue, DateTimeValue, GeoValue
+from .value_types import DateTimeValue, GeoValue, QuantityValue, TextValue
 
 __all__ = [
     "ValueMatchers",

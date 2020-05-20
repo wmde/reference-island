@@ -1,10 +1,10 @@
 import pytest
 
-from wikidatarefisland.data_model.wikibase.value_types import (
-    TextValue, QuantityValue, DateTimeValue, GeoValue
-)
-
 from mock_data import mock
+from wikidatarefisland.data_model.wikibase.value_types import (DateTimeValue,
+                                                               GeoValue,
+                                                               QuantityValue,
+                                                               TextValue)
 
 
 class TestQuantityValue:

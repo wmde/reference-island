@@ -1,4 +1,4 @@
-from .value_types import TextValue, QuantityValue, GeoValue, DateTimeValue
+from .value_types import DateTimeValue, GeoValue, QuantityValue, TextValue
 
 
 class ValueMatchers:

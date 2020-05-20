@@ -1,4 +1,4 @@
-blacklisted_items:
+blacklisted_item_classes:
     - Q86995636  # Scientific articles
     - Q318  # Galaxy
     - Q4167410  # disambiguation page

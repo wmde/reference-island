@@ -1,6 +1,7 @@
 import pytest
 
 from wikidatarefisland.pipes import ItemExtractorPipe
+
 from .test_data import mock_data as test_data
 
 given = {
@@ -43,6 +44,20 @@ given = {
                 ]
             }
         },
+        "without_blacklisted_classes": {
+            **test_data.ITEM,
+            "claims": {
+                test_data.NON_BLACKLISTED_PROPERTY: [
+                    test_data.mock["claim"]["with_any_unreferenced_property"]
+                ],
+                test_data.WHITELISTED_EXT_ID: [
+                    test_data.mock["claim"]["with_whitelisted_external_id"]
+                ],
+                test_data.INSTANCE_OF_PROPERTY: [
+                    test_data.mock["claim"]["with_blacklisted_class"]
+                ]
+            }
+        },
         "with_all": {
             **test_data.ITEM,
             "claims": {
@@ -78,6 +93,7 @@ class TestItemExtractorPipe:
         (given["item"]["without_non_ignored_references"], [expected["line"]["with_all"]]),
         (given["item"]["without_unreferenced_claims"], []),
         (given["item"]["without_non_blacklisted_properties"], []),
+        (given["item"]["without_blacklisted_classes"], []),
         (given["item"]["without_whitelisted_external_ids"], []),
         (given["item"]["with_all"], [expected["line"]["with_all"]])
     ])
@@ -86,11 +102,13 @@ class TestItemExtractorPipe:
         blacklisted_properties = [test_data.BLACKLISTED_PROPERTY]
         whitelisted_ext_ids = [test_data.WHITELISTED_EXT_ID]
         imported_from_properties = [test_data.IGNORED_REFERENCE_PROPERTY]
+        blacklisted_classes = [test_data.BLACKLISTED_CLASS]
 
         pipe = ItemExtractorPipe(
             external_id_formatter,
             blacklisted_properties,
             whitelisted_ext_ids,
+            blacklisted_classes,
             imported_from_properties)
 
         assert pipe.flow(given) == expected

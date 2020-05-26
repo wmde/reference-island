@@ -139,3 +139,6 @@ dmypy.json
 
 # VSCODE
 .vscode/
+
+# PHP Composer
+wikidata_game/vendor

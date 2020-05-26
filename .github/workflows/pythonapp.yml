@@ -1,6 +1,9 @@
 name: Wikidata Reference Island
 
-on: [push]
+on: 
+  push:
+    paths-ignore:
+      - 'wikidata_game/**'
 
 jobs:
   build:

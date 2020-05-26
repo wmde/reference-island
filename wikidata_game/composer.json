@@ -1,0 +1,12 @@
+{
+    "name": "wmde/reference-hunt-game",
+    "description": "A distributed game to evaluate and add potential references for Wikidata Statements",
+    "scripts": {
+        "test": "phpunit --testdox tests"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    },
+    "license": "GPLv3",
+    "require": {}
+}

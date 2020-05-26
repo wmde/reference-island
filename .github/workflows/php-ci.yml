@@ -1,0 +1,29 @@
+name: Wikidata Reference Hunt Game
+
+on: 
+  push:
+    paths:
+      - 'wikidata_game/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        phpVersion: [7.3, 7.4]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up PHP ${{ matrix.phpVersion }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.phpVersion }}
+    
+    - name: Install dependencies
+      run: |
+        php wikidata_game/bin/composer install -d ./wikidata_game/
+
+    - name: Test with phpunit
+      run: |
+        php wikidata_game/bin/composer run-script test -d ./wikidata_game/

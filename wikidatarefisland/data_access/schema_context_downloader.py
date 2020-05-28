@@ -1,4 +1,7 @@
-from json import JSONDecodeError
+try:
+    from simplejson import JSONDecodeError
+except ImportError:
+    from json import JSONDecodeError
 import requests
 
 

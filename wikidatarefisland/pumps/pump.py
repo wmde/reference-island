@@ -23,6 +23,16 @@ class SimplePump(AbstractPump):
 
 
 class DumpReaderPump(AbstractPump):
+    """Pump for reading Wikidata JSON Entity Dumps and writing the output line by line
+
+    Pump that works at scale to read from Wikidata JSON Entity Dumps.
+    It can take either uncompressed or gzip or bzip2 formatted data
+    but it must contain one complete item per line.
+
+    Any malformed input lines are silently ignored.
+
+    Writing is batched such that each batch is at least as big as batch_size
+    """
     def __init__(self, storage: Storage, batch_size: int):
         self.storage = storage
         self.batch_size = batch_size

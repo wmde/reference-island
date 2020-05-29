@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: my_secret_pw_shh
+      MYSQL_DATABASE: test_db
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+  web:
+    build:
+      dockerfile: docker_config/Dockerfile-web
+      context: ./
+    container_name: php_web
+    depends_on:
+      - db
+    volumes:
+      - ./wikidata_game/:/var/www/html/
+      - ./docker_config/:/docker_config
+    ports:
+      - "8100:80"
+    environment:
+      CONFIG_PATH: '/docker_config'

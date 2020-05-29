@@ -137,6 +137,8 @@ dmypy.json
 .idea/
 *.iml
 
+**/.phpunit.result.cache
+
 # VSCODE
 .vscode/
 

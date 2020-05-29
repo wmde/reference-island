@@ -1,5 +1,7 @@
 <?PHP
 // This is a POC, don't judge
+
+// TODO: Replace with require_once('includes/setup-db.php')
 function getDb() {
     $server_root = $_SERVER['DOCUMENT_ROOT'];
     $dbmycnf = parse_ini_file($server_root . "/../replica.my.cnf");
@@ -19,6 +21,7 @@ function getDesc() {
     ];
 }
 
+// TODO: Move this and all following 'get' Functions into a dedicated api client module / file / class
 function loadApi($params) {
     $params['format'] = 'json';
     $baseUrl = 'https://www.wikidata.org/w/api.php';
@@ -128,6 +131,7 @@ function getFormattedItem($id) {
     return getFormattedValue('wikibase-entityid', $itemValue, 'wikibase-item');
 }
 
+// TODO: Move this and all following 'format' Functions into a dedicated formatting module / file / class
 function formatEntityValue($id, $value){
     // A hack to fix the URLS coming from wbformatvalue endpoint.
     $full_url_link = str_replace('href="/', 'target="_blank" href="http://wikidata.org/', $value); 
@@ -196,6 +200,7 @@ function formatSourceDataHTML($data) {
 function getTiles() {
     $db = getDb();
     $num = $_REQUEST['num'];
+    // TODO: Add as abstraction to "util/database.php" or extend createMatchesReader
     $sql = "SELECT * FROM refs WHERE ref_flag = 0 ORDER by RAND() DESC LIMIT " . $num;
     $result = $db->query($sql);
     $result = $result->fetchAll();
@@ -251,6 +256,7 @@ function getTiles() {
     return $output;
 }
 
+// TODO: Add as abstraction to "util/database.php" and wire-up in "includes/setup-db.php"
 function recordLog() {
     $db = getDb();
     $ref_id = (int)$_REQUEST['tile'];
@@ -271,6 +277,7 @@ function recordLog() {
     return [];
 }
 
+// TODO: Potentially move the following to "includes/responses.php"
 function dispatchRequest($action) {
     if ($action === 'desc') {
         return getDesc();
@@ -288,6 +295,7 @@ function dispatchRequest($action) {
 }
 
 $output = dispatchRequest($_REQUEST['action']);
+
 if (isset($_REQUEST['callback'])) {
     header('Content-type: text/javascript');
     print $_REQUEST['callback'] . '(';

@@ -8,5 +8,7 @@
         "phpunit/phpunit": "^9"
     },
     "license": "GPLv3",
-    "require": {}
+    "require": {
+      "ext-pdo": "*"
+    }
 }

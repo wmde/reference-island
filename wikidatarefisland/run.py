@@ -5,7 +5,8 @@ import sys
 from wikidatarefisland import (Config, data_access, data_model,
                                external_identifiers, pipes, pumps, services)
 from wikidatarefisland.data_access import SchemaContextDownloader
-from wikidatarefisland.data_access.offline_document_loader import OfflineDocumentLoader
+from wikidatarefisland.data_access.offline_document_loader import \
+    OfflineDocumentLoader
 from wikidatarefisland.data_model import wikibase
 
 
@@ -23,6 +24,11 @@ def main(argv, filepath):
     parser.add_argument('--side-service-input', default='side_service_input.json',
                         dest='side_service_input_path', type=str,
                         help='Optional file for the step to read input from')
+    parser.add_argument('--write-batch', default=20, dest='write_batch', type=int,
+                        help='Batch size to write in the file, '
+                             'choose bigger number if you have large memory')
+    parser.add_argument('--dump-path', dest='dump_path', type=str,
+                        help='Absolute path to the dump file')
 
     args = parser.parse_args(argv[1:])
 
@@ -36,6 +42,7 @@ def main(argv, filepath):
 
     # Pumps
     simple_pump = pumps.SimplePump(storage)
+    dump_reader_pump = pumps.DumpReaderPump(storage, args.write_batch)
 
     if 'ss1' == args.step:
         ext_ids = external_identifiers.GenerateWhitelistedExtIds(
@@ -53,7 +60,7 @@ def main(argv, filepath):
             config.get('blacklisted_item_classes'),
             config.get('ignored_reference_properties')
         )
-        simple_pump.run(item_extractor, args.input_path, args.output_path)
+        dump_reader_pump.run(item_extractor, args.dump_path, args.output_path)
 
     if 'scrape' == args.step:
         schema_context = storage.get(args.side_service_input_path)

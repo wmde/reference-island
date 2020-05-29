@@ -1,3 +1,5 @@
+import bz2
+import gzip
 import json
 import os
 
@@ -23,7 +25,7 @@ class TestStorage:
 
         assert storage.get("test.json") == json.loads(mock_file.read())
 
-    def test_getLines_json(self, tmpdir):
+    def test_get_dump_lines_json(self, tmpdir):
         mock_lines = [
             {"test": "hello"},
             {"goodbye": "test"}
@@ -38,10 +40,52 @@ class TestStorage:
 
         mock_file = tmpdir.join('test.json')
         mock_file.write(mock_data)
+        path = os.path.join(tmpdir, 'test.json')
 
         storage = Storage(tmpdir)
 
-        assert list(storage.getLines('test.json')) == mock_lines
+        assert list(storage.get_dump_lines(path)) == mock_lines
+
+    def test_get_dump_lines_gz(self, tmpdir):
+        mock_lines = [
+            {"test": "hello"},
+            {"goodbye": "test"}
+        ]
+
+        mock_data = '''
+        [
+            {"test": "hello"},
+            {"goodbye": "test"}
+        ]
+        '''
+        path = os.path.join(tmpdir, 'test.json.gz')
+        with gzip.open(path, 'w') as f:
+            f.write(bytes(mock_data, 'utf-8'))
+
+        storage = Storage(tmpdir)
+
+        assert list(storage.get_dump_lines(path)) == mock_lines
+
+    def test_get_dump_lines_bz2(self, tmpdir):
+        mock_lines = [
+            {"test": "hello"},
+            {"goodbye": "test"}
+        ]
+
+        mock_data = '''
+            [
+                {"test": "hello"},
+                {"goodbye": "test"}
+            ]
+            '''
+
+        path = os.path.join(tmpdir, 'test.json.bz2')
+        with bz2.open(path, 'w') as f:
+            f.write(bytes(mock_data, 'utf-8'))
+
+        storage = Storage(tmpdir)
+
+        assert list(storage.get_dump_lines(path)) == mock_lines
 
     def test_getLines_jsonl(self, tmpdir):
         mock_lines = [
@@ -71,12 +115,12 @@ class TestStorage:
 
     def test_append_raw(self, tmpdir):
         mock_file = tmpdir.join('test.txt')
-        mock_file.write('Hello ')
+        mock_file.write('Hello')
 
         storage = Storage(tmpdir)
         storage.append('test.txt', 'Goodbye', True)
 
-        assert mock_file.read() == 'Hello Goodbye'
+        assert mock_file.read() == 'Hello\nGoodbye'
 
     def test_append_json(self, tmpdir):
         mock_lines = [

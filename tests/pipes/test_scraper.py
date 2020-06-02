@@ -1,19 +1,6 @@
-import os
-
-import requests
-
 from wikidatarefisland import Config
 from wikidatarefisland.pipes import ScraperPipe
 from wikidatarefisland.services import SchemaorgPropertyMapper
-
-
-class MockResponse:
-    def __init__(self, url):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        with open(os.path.join(dir_path, '../data/test_response.html'), 'r') as f:
-            self.text = f.read()
-        self.status_code = 200
-        self.url = url
 
 
 class MockSchemaorgPropertyMapper(SchemaorgPropertyMapper):
@@ -50,16 +37,7 @@ class MockSchemaorgNormalizer():
         }]
 
 
-class MockSession():
-    def __init__(self):
-        self.headers = {}
-
-    def get(self, url, *args, **kwargs):
-        return MockResponse(url)
-
-
-def test_run(monkeypatch):
-    monkeypatch.setattr(requests, "Session", MockSession)
+def test_run(mock_response):
     item = {
         'itemId': 'Q42',
         'resourceUrls': [{

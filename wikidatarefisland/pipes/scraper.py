@@ -1,5 +1,5 @@
 import concurrent.futures
-from time import gmtime, strftime
+import time
 
 import extruct
 import requests
@@ -55,7 +55,7 @@ class ScraperPipe(AbstractPipe):
         base_url = get_base_url(r.text, r.url)
         data = extruct.extract(r.text, base_url=base_url, uniform=True)
         return {'data': self.schemaorg_normalizer.normalize_from_extruct(data),
-                'timestamp': strftime("%Y-%m-%d %H:%M:%S", gmtime())}
+                'timestamp': time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())}
 
     def _match_extracted_data(self, extracted_data, resourceUrls, mapping, item):
         final_data = []

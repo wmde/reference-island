@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: devpass
   web:
     build:
-      dockerfile: docker_config/Dockerfile-web
+      dockerfile: docker_config/Dockerfile-web # Using custom docker image derived from the official php 7.3 apache image to enable the PDO extension.
       context: ./
     container_name: php_web
     depends_on:

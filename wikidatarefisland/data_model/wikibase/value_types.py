@@ -76,7 +76,11 @@ class DateTimeValue:
             date = isoparse(self.value[:4])
             return date.year == compare.year
 
-        date = isoparse(self.value)
+        try:
+            date = isoparse(self.value)
+        except ValueError:
+            # Some Wikibase dates are not valid: https://phabricator.wikimedia.org/T85296
+            return False
         return date.year == compare.year \
             and date.month == compare.month \
             and date.day == compare.day

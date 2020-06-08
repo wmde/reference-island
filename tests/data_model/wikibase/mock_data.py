@@ -41,6 +41,13 @@ mock = {
                     "time": '+1986-05-04T00:00:00Z',
                     "precision": 9
                 }
+            },
+            "invalid_date_day_precision": {
+                "datatype": 'time',
+                "value": {
+                    "time": '+1986-20-20T00:00:00Z',
+                    "precision": 11
+                }
             }
         },
         "with_globe-coordinate": {

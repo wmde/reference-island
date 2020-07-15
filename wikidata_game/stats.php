@@ -4,9 +4,10 @@ require_once('includes/constants.php');
 require_once('includes/responses.php');
 require_once('includes/setup-db.php');
 
-if(isset($_GET['dump']) && $_GET['dump'] === 'rejected'){
-    $rejected = $getMatches(FLAGS['REJECTED']);
-    csvDumpResponse('rejected-matches', $rejected);
+if(isset($_GET['dump']) && array_key_exists($_GET['dump'], FLAGS)){
+    $match_flag = $_GET['dump'];
+    $matches = $getMatches(FLAGS[$match_flag]);
+    csvDumpResponse(strtolower($match_flag) . '-matches', $matches);
     exit();
 }
 

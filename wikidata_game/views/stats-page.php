@@ -25,6 +25,6 @@
             <strong>Acceptance Rate</strong>: <?php echo $acceptance_rate ?>%
         </li>
     </ul>
-    <p><a href="?dump=rejected" download>Download Rejected Matches (CSV)</a></p>
+    <p><a href="?dump=REJECTED" download>Download Rejected Matches (CSV)</a></p>
 </body>
 </html>

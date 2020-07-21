@@ -28,7 +28,8 @@ The following document describes the various data dump outputs of the Reference 
 
 This dump is the Result of [SS 1: External Resource Checker](pipeline.md#ss-1-external-resource-checker). It is a `json` file containing an array of Wikibase external id PID strings.
 
-[Scrape #3 Allowed Resources Example](https://raw.githubusercontent.com/wmde/reference-hunting-data/master/whitelisted_ext_idefs.json?token=ABOZJNMEXT7OJRQDOAVWDUC63JNUQ).
+[Scrape #3 Allowed Resources Example](https://raw.githubusercontent.com/wmde/reference-hunting-data/master/allowed_ext_idefs.json?token=ABOZJNMEXT7OJRQDOAVWDUC63JNUQ).
+
 
 ### Extracted Items Dump
 

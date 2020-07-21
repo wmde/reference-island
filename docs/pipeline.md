@@ -17,7 +17,7 @@ The following document aims to describe the flow of data in the Reference Island
   - [Pipe 3: Value Matcher](#pipe-3-value-matcher)
   - [Pipe 4: Statistical Matcher](#pipe-4-statistical-matcher)
 - [Side Services](#side-services)
-  - [SS 1: External Resource Whitelister](#ss-1-external-resource-whitelister)
+  - [SS 1: External Resource Checker](#ss-1-external-resource-checker)
   - [SS 2: Schema.org JSON-LD context fetcher](#ss-2-schemaorg-json-ld-context-fetcher)
 - [Noteworthy Utility Classes](#noteworthy-utility-classes)
   - [Wikidata External Id URL Formatter](#wikidata-external-id-url-formatter)
@@ -65,9 +65,9 @@ The observer pump is designed as a read only pipeline. It reads files in `jsonl`
 
 This pipe segment is designed to filter out and formats Wikibase Items according to specified criteria. In order to pass this pipe segment, the Item must:
 
-* Not be an instance of a [***blacklisted class***](../config/default.yml#L1-L9).
-* Have at least one [***unreferenced***](../config/default.yml#L108-L110) statement of a [***non blacklisted property***](../config/default.yml#L11-L76).
-* Have at least one External Id linking to a ***whitelisted*** external resource (see: [SS 1: External Resource Whitelister](#ss-1-external-resource-whitelister)).
+* Not be an instance of a [***ignored class***](../config/default.yml#L1-L9).
+* Have at least one [***unreferenced***](../config/default.yml#L108-L110) statement of a [***non skipped property***](../config/default.yml#L11-L76).
+* Have at least one External Id linking to a ***allowed*** external resource (see: [SS 1: External Resource Checker](#ss-1-external-resource-checker)).
 
 It takes in a de-serialized [Wikibase Item](https://gerrit.wikimedia.org/r/plugins/gitiles/mediawiki/extensions/Wikibase/+/master/docs/topics/json.md#json) dump as an input and returns an array with a single [`ItemLine`](result.md#itemline) or an empty array if the item does not match the criteria.
 
@@ -100,11 +100,11 @@ This segment iterates over the data dump twice, where each pipe takes in a singl
 
 ## Side Services
 
-### SS 1: External Resource Whitelister
+### SS 1: External Resource Checker
 
-[[Code]](../wikidatarefisland/external_identifiers/generate_whitelisted_ext_ids.py), [[Makefile Command]](../Makefile#L7-L8): `make data/whitelisted_ext_idefs.json`
+[[Code]](../wikidatarefisland/external_identifiers/generate_allowed_ext_ids.py), [[Makefile Command]](../Makefile#L7-L8): `make data/allowed_ext_idefs.json`
 
-This service produces a list of External Identifier resource which are viable candidates for data extraction. It test-scrapes a sample of 10 use cases from each non [***blacklisted external identifier***](../config/default.yml#L78-L106), obtained through the [Wikidata Query Service](https://query.wikidata.org/), to determine whether the resource of that identifier contains enough viable data to scrape. It then collects all identifiers representing viable resources and writes their Wikibase Property IDs to a JSON array.
+This service produces a list of External Identifier resource which are viable candidates for data extraction. It test-scrapes a sample of 10 use cases from each non [***ignored external identifier***](../config/default.yml#L78-L106), obtained through the [Wikidata Query Service](https://query.wikidata.org/), to determine whether the resource of that identifier contains enough viable data to scrape. It then collects all identifiers representing viable resources and writes their Wikibase Property IDs to a JSON array.
 
 ###  SS 2: Schema.org JSON-LD context fetcher
 

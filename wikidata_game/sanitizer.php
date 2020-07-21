@@ -1,6 +1,6 @@
 <?php
 /**
- * Dumps a db backup, and removes potential references from blacklisted sources
+ * Dumps a db backup, and removes potential references from ignored sources
  * This is throwaway code, meant to only run once as a resolution of bug T252781
  */
 
@@ -16,8 +16,8 @@ function backupTable($dbhost, $dbname, $mycnf_path) {
     exec("mysqldump --defaults-file=". $mycnf_path ." --host=$dbhost $dbname --result-file=$backup_file");
 }
 
-function getBlacklistedRefs($blacklist){
-    return function($row) use ($blacklist){
+function getRefsToRemove($removelist){
+    return function($row) use ($removelist){
         $data = json_decode($row["ref_data"], true);
         $reference_meta = $data["reference"]["referenceMetadata"];
         if($reference_meta == NULL){
@@ -25,7 +25,7 @@ function getBlacklistedRefs($blacklist){
         }
 
         foreach(array_keys($reference_meta) as $key){
-            if(in_array($key, $blacklist)){
+            if(in_array($key, $removelist)){
                 return TRUE;
             }
         }
@@ -51,11 +51,11 @@ if(!$dbmycnf){
     exit(1);
 }
 
-$blacklist_path = $root . '/blacklisted-properties.json';
-$blacklist = json_decode(file_get_contents($blacklist_path));
+$removelist_path = $root . '/ignored-properties.json';
+$removelist = json_decode(file_get_contents($removelist_path));
 
-if(!$blacklist){
-    echo 'Could not find external id blacklist file' . PHP_EOL;
+if(!$removelist){
+    echo 'Could not find external id in ignored properties file' . PHP_EOL;
     exit(1);
 }
 
@@ -66,7 +66,7 @@ $db = getDb($dbhost, $dbname, $dbmycnf);
 $sql_select = "SELECT * FROM refs WHERE ref_flag = 0";
 $rows = $db->query($sql_select)->fetchAll();
 
-$bad_references = array_filter($rows, getBlacklistedRefs($blacklist));
+$bad_references = array_filter($rows, getRefsToRemove($removelist));
 $delete_count = sizeof($bad_references);
 $remaining_count = sizeof($rows) - $delete_count; 
 

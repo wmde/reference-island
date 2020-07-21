@@ -10,24 +10,24 @@ from .abstract_pipe import AbstractPipe
 class ItemExtractorPipe(AbstractPipe):
     """Pipe that extracts statements that could be referenced from an item"""
     def __init__(self, external_id_formatter,
-                 blacklisted_properties=None,
-                 whitelisted_ext_ids=None,
-                 blacklisted_classes=None,
+                 skipped_properties=None,
+                 allowed_ext_ids=None,
+                 ignored_classes=None,
                  ignored_reference_properties=[]):
         self.external_id_formatter = external_id_formatter
-        if blacklisted_properties is None:
-            blacklisted_properties = []
-        self.blacklisted_properties = blacklisted_properties
-        if whitelisted_ext_ids is None:
-            whitelisted_ext_ids = []
-        self.whitelisted_ext_ids = whitelisted_ext_ids
-        if blacklisted_classes is None:
-            blacklisted_classes = []
-        self.blacklisted_classes = blacklisted_classes
+        if skipped_properties is None:
+            skipped_properties = []
+        self.skipped_properties = skipped_properties
+        if allowed_ext_ids is None:
+            allowed_ext_ids = []
+        self.allowed_ext_ids = allowed_ext_ids
+        if ignored_classes is None:
+            ignored_classes = []
+        self.ignored_classes = ignored_classes
         self.ignored_reference_properties = ignored_reference_properties
 
     def flow(self, input_data):
-        item_class_excluder = ItemFilters().get_item_class_excluder(self.blacklisted_classes)
+        item_class_excluder = ItemFilters().get_item_class_excluder(self.ignored_classes)
         if item_class_excluder(input_data) is False:
             return []
         return self._process_item(input_data)
@@ -51,7 +51,7 @@ class ItemExtractorPipe(AbstractPipe):
         statement_filters = StatementFilters()
 
         external_id_statements = list(filter(
-            statement_filters.get_property_id_statement_includer(self.whitelisted_ext_ids),
+            statement_filters.get_property_id_statement_includer(self.allowed_ext_ids),
             all_statements
         ))
         resource_urls = map(self._format_external_id, external_id_statements)
@@ -69,7 +69,7 @@ class ItemExtractorPipe(AbstractPipe):
             lambda statement: statement is not None,
             statement_filters.get_referenced_statement_excluder(self.ignored_reference_properties),
             statement_filters.external_id_statement_excluder,
-            statement_filters.get_property_id_statement_excluder(self.blacklisted_properties)
+            statement_filters.get_property_id_statement_excluder(self.skipped_properties)
         ]
         potentially_ref_statement_filterer = StatementFilterer(
             ref_statement_filters

@@ -3,7 +3,7 @@ import concurrent.futures
 import requests
 
 
-class GenerateWhitelistedExtIds():
+class GenerateAllowedExtIds():
 
     def __init__(self, wdqs_reader, storage, config, external_identifier_formatter,
                  no_checks=10, no_processes=10):
@@ -67,7 +67,7 @@ class GenerateWhitelistedExtIds():
 
         pids = []
         for i in external_identifiers:
-            if i in final_results or i in self.config.get('blacklisted_external_identifiers'):
+            if i in final_results or i in self.config.get('ignored_external_identifiers'):
                 continue
             pids.append(i)
 

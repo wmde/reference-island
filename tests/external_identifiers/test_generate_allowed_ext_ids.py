@@ -1,6 +1,6 @@
 import requests
 
-from wikidatarefisland.external_identifiers import GenerateWhitelistedExtIds
+from wikidatarefisland.external_identifiers import GenerateAllowedExtIds
 from wikidatarefisland.services import ExternalIdentifierFormatter
 
 
@@ -38,7 +38,7 @@ class MockStorage():
 
 class MockConfig():
     def get(self, key):
-        if key == 'blacklisted_external_identifiers':
+        if key == 'ignored_external_identifiers':
             return ['P3']
 
 
@@ -48,10 +48,10 @@ def test_run(monkeypatch):
 
     monkeypatch.setattr(requests, "get", mock_get)
     storage = MockStorage()
-    generate_whitelisted_ext_id = GenerateWhitelistedExtIds(
+    generate_allowed_ext_id = GenerateAllowedExtIds(
         MockWdqsReader(), storage, MockConfig(), MockExternalIdentifierFormatter())
-    whitelist = generate_whitelisted_ext_id.run()
-    assert whitelist == ['P1']
-    assert storage.get(generate_whitelisted_ext_id.result_file_name) == \
+    allowed_ids = generate_allowed_ext_id.run()
+    assert allowed_ids == ['P1']
+    assert storage.get(generate_allowed_ext_id.result_file_name) == \
         {'P1': {'good_responses': 10, 'has_schema': 10, 'total_requests': 10},
          'P2': {'good_responses': 10, 'has_schema': 0, 'total_requests': 10}}

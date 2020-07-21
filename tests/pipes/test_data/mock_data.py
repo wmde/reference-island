@@ -1,12 +1,12 @@
 IGNORED_REFERENCE_PROPERTY = "P143"
-WHITELISTED_EXT_ID = "P3029"
+ALLOWED_EXT_ID = "P3029"
 EXTERNAL_ID_VALUE = "tst1234"
-NON_WHITELISTED_EXT_ID = "P3028"
+NON_ALLOWED_EXT_ID = "P3028"
 ITEM_ID = "Q23"
-BLACKLISTED_PROPERTY = "P26"
-NON_BLACKLISTED_PROPERTY = "P509"
-BLACKLISTED_CLASS = "Q987"
-BLACKLISTED_CLASS_INT_ID = 987
+SKIPPED_PROPERTY = "P26"
+NON_SKIPPED_PROPERTY = "P509"
+IGNORED_CLASS = "Q987"
+IGNORED_CLASS_INT_ID = 987
 INSTANCE_OF_PROPERTY = "P31"
 DATATYPE = "wikibase-item"
 
@@ -16,14 +16,14 @@ VALUE_BLOB = {
     "id": "Q191789"
 }
 
-BLACKLISTED_CLASS_VALUE_BLOB = {
+IGNORED_CLASS_VALUE_BLOB = {
     "entity-type": "item",
-    "numeric-id": BLACKLISTED_CLASS_INT_ID,
-    "id": BLACKLISTED_CLASS
+    "numeric-id": IGNORED_CLASS_INT_ID,
+    "id": IGNORED_CLASS
 }
 
 STATEMENT_BLOB = {
-    "pid": NON_BLACKLISTED_PROPERTY,
+    "pid": NON_SKIPPED_PROPERTY,
     "datatype": DATATYPE,
     "value": VALUE_BLOB
 }
@@ -63,7 +63,7 @@ EXAMPLE_LINE = {
     **REFERENCE_LINE,
     'statement': STATEMENT_BLOB,
     'reference': {
-        'referenceMetadata': {WHITELISTED_EXT_ID: 'fooid'},
+        'referenceMetadata': {ALLOWED_EXT_ID: 'fooid'},
         'extractedData': ['foo', 'bar']
     }
 }
@@ -71,7 +71,7 @@ mock = {
     "claim": {
         "with_ignored_references_only": {
             "mainsnak": {
-                "property": NON_BLACKLISTED_PROPERTY,
+                "property": NON_SKIPPED_PROPERTY,
                 "datavalue": {
                     "value": VALUE_BLOB
                 },
@@ -85,7 +85,7 @@ mock = {
         },
         "with_references": {
             "mainsnak": {
-                "property": NON_BLACKLISTED_PROPERTY
+                "property": NON_SKIPPED_PROPERTY
             },
             "references": [
                 {
@@ -98,14 +98,14 @@ mock = {
         },
         "with_any_external_id": {
             "mainsnak": {
-                "property": NON_WHITELISTED_EXT_ID,
+                "property": NON_ALLOWED_EXT_ID,
                 "datatype": "external-id"
             }
         },
-        "with_whitelisted_external_id": {
+        "with_allowed_external_id": {
             "mainsnak": {
                 "datatype": "external-id",
-                "property": WHITELISTED_EXT_ID,
+                "property": ALLOWED_EXT_ID,
                 "datavalue": {
                     "value": EXTERNAL_ID_VALUE
                 }
@@ -113,25 +113,25 @@ mock = {
         },
         "with_any_unreferenced_property": {
             "mainsnak": {
-                "property": NON_BLACKLISTED_PROPERTY,
+                "property": NON_SKIPPED_PROPERTY,
                 "datavalue": {
                     "value": VALUE_BLOB
                 },
                 "datatype": DATATYPE
             }
         },
-        "with_blacklisted_class": {
+        "with_ignored_class": {
             "mainsnak": {
                 "property": INSTANCE_OF_PROPERTY,
                 "datavalue": {
-                    "value": BLACKLISTED_CLASS_VALUE_BLOB
+                    "value": IGNORED_CLASS_VALUE_BLOB
                 },
                 "datatype": DATATYPE
             }
         },
-        "with_blacklisted_property": {
+        "with_skipped_property": {
             "mainsnak": {
-                "property": BLACKLISTED_PROPERTY
+                "property": SKIPPED_PROPERTY
             }
         }
     }

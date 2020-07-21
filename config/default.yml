@@ -1,4 +1,4 @@
-blacklisted_item_classes:
+ignored_item_classes:
     - Q86995636  # Scientific articles
     - Q318  # Galaxy
     - Q4167410  # disambiguation page
@@ -8,7 +8,7 @@ blacklisted_item_classes:
     - Q13442814  # Journal article
     - Q13406463  # Wikimedia List
 
-blacklisted_properties:
+skipped_properties:
     - P31
     - P279
     - P373  # Commons category
@@ -75,7 +75,7 @@ blacklisted_properties:
     - P7457
     # End of Commons media data type:
 
-blacklisted_external_identifiers:
+ignored_external_identifiers:
     - P646  # Freebase
     - P345  # IMDb
     - P434

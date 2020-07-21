@@ -8,7 +8,7 @@ This documentation is for developers wishing to run the pipeline in a large scal
   - [Prerequisites](#prerequisites)
 - [Steps to run](#steps-to-run)
   - [1. Setup Cloud VPS Virtual Machine](#1-setup-cloud-vps-virtual-machine)
-  - [2. Run Side Service 1: External Resource Whitelister](#2-run-side-service-1-external-resource-whitelister)
+  - [2. Run Side Service 1: External Resource Checker](#2-run-side-service-1-external-resource-checker)
   - [3. Run Pipe 1: Item Extractor](#3-run-pipe-1-item-extractor)
     - [Setup](#setup)
     - [Run](#run)
@@ -62,14 +62,14 @@ Clone the repository to your ***Cloud VPS VM***, and run the following command *
 
    
 
-## 2. Run [Side Service 1: External Resource Whitelister](pipeline.md#ss-1-external-resource-whitelister)
+## 2. Run [Side Service 1: External Resource Checker](pipeline.md#ss-1-external-resource-checker)
 
 _**Important:** Do not run this step on an Analytics Cluster Machine, as it makes calls to third party websites._
 
 On the ***Cloud VPS VM*** run the following:
 
 ```bash
-make data/whitelisted_ext_idefs.json
+make data/allowed_ext_idefs.json
 ```
 
 ## 3. Run [Pipe 1: Item Extractor](pipeline.md#pipe-1-item-extractor)
@@ -97,7 +97,7 @@ This step should be run on a machine in the ***Analytics cluster***. The initial
 
 ### Run
 
-1. Copy across your generated `whitelisted_ext_idefs.json` to the `data` folder in this repository.
+1. Copy across your generated `allowed_ext_idefs.json` to the `data` folder in this repository.
 
 2. Run the following:
 

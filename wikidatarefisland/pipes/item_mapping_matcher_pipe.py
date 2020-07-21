@@ -4,14 +4,14 @@ from wikidatarefisland.pipes import AbstractPipe
 class ItemMappingMatcherPipe(AbstractPipe):
     """Pipe to match potential references with statement data on item values using a mapping."""
 
-    def __init__(self, mapping, whitelisted_external_identifiers):
+    def __init__(self, mapping, allowed_external_identifiers):
         """
         :type mapping: dict See ItemStatisticalAnalysisPipe.get_mapping()
-        :type whitelisted_external_identifiers: list of whitelisted external identifiers
+        :type allowed_external_identifiers: list of allowed external identifiers
             like ['P1', 'P3', ...]
         """
         self.mapping = mapping
-        self.whitelisted_external_identifiers = whitelisted_external_identifiers
+        self.allowed_external_identifiers = allowed_external_identifiers
 
     def flow(self, potential_match):
         """Apply transformations to data flow
@@ -28,7 +28,7 @@ class ItemMappingMatcherPipe(AbstractPipe):
         item_id = potential_match['statement']['value']['numeric-id']
         ext_id_property = None
         for pid in potential_match['reference']['referenceMetadata']:
-            if pid not in self.whitelisted_external_identifiers:
+            if pid not in self.allowed_external_identifiers:
                 continue
             ext_id_property = pid
             break

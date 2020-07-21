@@ -92,7 +92,7 @@ To run only individual parts of the data pipeline, add a name for the result fil
 
 The commands for each sequential step are as follows:
 
-1. `make data/whitelisted_ext_idefs.json` runs [SS 1: External Resource Whitelister](pipeline.md#ss-1-external-resource-whitelister)
+1. `make data/allowed_ext_idefs.json` runs [SS 1: External Resource Checker](pipeline.md#ss-1-external-resource-checker)
 2. `DUMP_PATH=<path-to-dump-file> make data/extracted_unreferenced_statements.jsonl` runs [Pipe 1: Item Extractor](pipeline.md#pipe-1-item-extractor)
 3. `make data/schema_org_context.jsonld` runs [SS 2: Schema.org JSON-LD context fetcher](pipeline.md#ss-2-schemaorg-json-ld-context-fetcher)
 4. `make data/scraped_data.jsonl` runs [Pipe 2: Scraper](pipeline.md#pipe-2-scraper)

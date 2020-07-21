@@ -7,7 +7,7 @@ The following document describes the various data dump outputs of the Reference 
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [JSON and JSON-L dumps](#json-and-json-l-dumps)
-  - [Whitelisted External Ids Dump](#whitelisted-external-ids-dump)
+  - [Allowed External Ids Dump](#allowed-external-ids-dump)
   - [Extracted Items Dump](#extracted-items-dump)
   - [Potential Matches Dump](#potential-matches-dump)
 - [Lines](#lines)
@@ -24,11 +24,11 @@ The following document describes the various data dump outputs of the Reference 
 
 ## JSON and JSON-L dumps
 
-### Whitelisted External Ids Dump
+### Allowed External Ids Dump
 
-This dump is the Result of [SS 1: External Resource Whitelister](pipeline.md#ss-1-external-resource-whitelister). It is a `json` file containing an array of Wikibase external id PID strings.
+This dump is the Result of [SS 1: External Resource Checker](pipeline.md#ss-1-external-resource-checker). It is a `json` file containing an array of Wikibase external id PID strings.
 
-[Scrape #3 Whitelisted Resources Example](https://raw.githubusercontent.com/wmde/reference-hunting-data/master/whitelisted_ext_idefs.json?token=ABOZJNMEXT7OJRQDOAVWDUC63JNUQ).
+[Scrape #3 Allowed Resources Example](https://raw.githubusercontent.com/wmde/reference-hunting-data/master/whitelisted_ext_idefs.json?token=ABOZJNMEXT7OJRQDOAVWDUC63JNUQ).
 
 ### Extracted Items Dump
 
@@ -46,7 +46,7 @@ This dump is the result of [Pipe 2: Scraper](pipeline.md#pipe-2-scraper), [Pipe 
 
 ### `ItemLine`
 
-A JSON object to represent a Wikibase item which contains unreferenced statements and [***whitelisted***](pipeline.md#ss-1-external-resource-whitelister) external source URLs. This information is extracted from a Wikidata data dump in [Pipe 1: Item Extractor](#pipe-1-item-extractor).
+A JSON object to represent a Wikibase item which contains unreferenced statements and [***allowed***](pipeline.md#ss-1-external-resource-checker) external source URLs. This information is extracted from a Wikidata data dump in [Pipe 1: Item Extractor](#pipe-1-item-extractor).
 
 ```js
 {

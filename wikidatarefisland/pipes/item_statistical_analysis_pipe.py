@@ -6,15 +6,15 @@ from wikidatarefisland.pipes import AbstractPipe
 class ItemStatisticalAnalysisPipe(AbstractPipe):
     """Pipe to analyze and build a mapping of item qids to values given in the scraped data."""
 
-    def __init__(self, whitelisted_external_identifiers, minimum_repetitions, maximum_noise):
+    def __init__(self, allowed_external_identifiers, minimum_repetitions, maximum_noise):
         """Instantiate the pipe
 
-        :type whitelisted_external_identifiers: list of whitelisted external identifiers
+        :type allowed_external_identifiers: list of allowed external identifiers
             like ['P1', 'P3', ...]
         :type minimum_repetitions: int minimum number of receptions to consider two values the same
             The higher the number, the higher precision and the lower recall will be
         """
-        self.whitelisted_external_identifiers = whitelisted_external_identifiers
+        self.allowed_external_identifiers = allowed_external_identifiers
         self.minimum_repetitions = minimum_repetitions
         self.maximum_noise = maximum_noise
         self.statistics = defaultdict(dict)
@@ -37,7 +37,7 @@ class ItemStatisticalAnalysisPipe(AbstractPipe):
         ext_id_property = None
         # TODO: Pass the pid in the scraper so we can use it directly here
         for pid in potential_match['reference']['referenceMetadata']:
-            if pid not in self.whitelisted_external_identifiers:
+            if pid not in self.allowed_external_identifiers:
                 continue
             ext_id_property = pid
             break

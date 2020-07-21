@@ -9,63 +9,63 @@ given = {
         "without_non_ignored_references": {
             **test_data.ITEM,
             "claims": {
-                test_data.NON_BLACKLISTED_PROPERTY: [
+                test_data.NON_SKIPPED_PROPERTY: [
                     test_data.mock["claim"]["with_ignored_references_only"]
                 ],
-                test_data.WHITELISTED_EXT_ID: [
-                    test_data.mock["claim"]["with_whitelisted_external_id"]
+                test_data.ALLOWED_EXT_ID: [
+                    test_data.mock["claim"]["with_allowed_external_id"]
                 ]
             }
         },
         "without_unreferenced_claims": {
             **test_data.ITEM,
             "claims": {
-                test_data.NON_BLACKLISTED_PROPERTY: [
+                test_data.NON_SKIPPED_PROPERTY: [
                     test_data.mock["claim"]["with_references"]
                 ]
             }
         },
-        "without_non_blacklisted_properties": {
+        "without_non_skipped_properties": {
             **test_data.ITEM,
             "claims": {
-                test_data.BLACKLISTED_PROPERTY: [
-                    test_data.mock["claim"]["with_blacklisted_property"]
+                test_data.SKIPPED_PROPERTY: [
+                    test_data.mock["claim"]["with_skipped_property"]
                 ]
             }
         },
-        "without_whitelisted_external_ids": {
+        "without_allowed_external_ids": {
             **test_data.ITEM,
             "claims": {
-                test_data.NON_BLACKLISTED_PROPERTY: [
+                test_data.NON_SKIPPED_PROPERTY: [
                     test_data.mock["claim"]["with_any_unreferenced_property"]
                 ],
-                test_data.NON_WHITELISTED_EXT_ID: [
+                test_data.NON_ALLOWED_EXT_ID: [
                     test_data.mock["claim"]["with_any_external_id"]
                 ]
             }
         },
-        "without_blacklisted_classes": {
+        "without_ignored_classes": {
             **test_data.ITEM,
             "claims": {
-                test_data.NON_BLACKLISTED_PROPERTY: [
+                test_data.NON_SKIPPED_PROPERTY: [
                     test_data.mock["claim"]["with_any_unreferenced_property"]
                 ],
-                test_data.WHITELISTED_EXT_ID: [
-                    test_data.mock["claim"]["with_whitelisted_external_id"]
+                test_data.ALLOWED_EXT_ID: [
+                    test_data.mock["claim"]["with_allowed_external_id"]
                 ],
                 test_data.INSTANCE_OF_PROPERTY: [
-                    test_data.mock["claim"]["with_blacklisted_class"]
+                    test_data.mock["claim"]["with_ignored_class"]
                 ]
             }
         },
         "with_all": {
             **test_data.ITEM,
             "claims": {
-                test_data.NON_BLACKLISTED_PROPERTY: [
+                test_data.NON_SKIPPED_PROPERTY: [
                     test_data.mock["claim"]["with_any_unreferenced_property"]
                 ],
-                test_data.WHITELISTED_EXT_ID: [
-                    test_data.mock["claim"]["with_whitelisted_external_id"]
+                test_data.ALLOWED_EXT_ID: [
+                    test_data.mock["claim"]["with_allowed_external_id"]
                 ]
             }
         }
@@ -92,23 +92,23 @@ class TestItemExtractorPipe:
     @pytest.mark.parametrize("given,expected", [
         (given["item"]["without_non_ignored_references"], [expected["line"]["with_all"]]),
         (given["item"]["without_unreferenced_claims"], []),
-        (given["item"]["without_non_blacklisted_properties"], []),
-        (given["item"]["without_blacklisted_classes"], []),
-        (given["item"]["without_whitelisted_external_ids"], []),
+        (given["item"]["without_non_skipped_properties"], []),
+        (given["item"]["without_ignored_classes"], []),
+        (given["item"]["without_allowed_external_ids"], []),
         (given["item"]["with_all"], [expected["line"]["with_all"]])
     ])
     def test_flow(self, given, expected):
         external_id_formatter = MockExternalIdFormatter()
-        blacklisted_properties = [test_data.BLACKLISTED_PROPERTY]
-        whitelisted_ext_ids = [test_data.WHITELISTED_EXT_ID]
+        skipped_properties = [test_data.SKIPPED_PROPERTY]
+        allowed_ext_ids = [test_data.ALLOWED_EXT_ID]
         imported_from_properties = [test_data.IGNORED_REFERENCE_PROPERTY]
-        blacklisted_classes = [test_data.BLACKLISTED_CLASS]
+        ignored_classes = [test_data.IGNORED_CLASS]
 
         pipe = ItemExtractorPipe(
             external_id_formatter,
-            blacklisted_properties,
-            whitelisted_ext_ids,
-            blacklisted_classes,
+            skipped_properties,
+            allowed_ext_ids,
+            ignored_classes,
             imported_from_properties)
 
         assert pipe.flow(given) == expected

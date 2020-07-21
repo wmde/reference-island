@@ -45,19 +45,19 @@ def main(argv, filepath):
     dump_reader_pump = pumps.DumpReaderPump(storage, args.write_batch)
 
     if 'ss1' == args.step:
-        ext_ids = external_identifiers.GenerateWhitelistedExtIds(
+        ext_ids = external_identifiers.GenerateAllowedExtIds(
             wdqs_reader, storage, config, external_identifier_formatter).run()
 
         storage.store(args.output_path, ext_ids)
         return
 
     if 'extract_items' == args.step:
-        whitelisted_ext_ids = storage.get(args.side_service_input_path)
+        allowed_ext_ids = storage.get(args.side_service_input_path)
         item_extractor = pipes.ItemExtractorPipe(
             external_identifier_formatter,
-            config.get('blacklisted_properties'),
-            whitelisted_ext_ids,
-            config.get('blacklisted_item_classes'),
+            config.get('skipped_properties'),
+            allowed_ext_ids,
+            config.get('ignored_item_classes'),
             config.get('ignored_reference_properties')
         )
         dump_reader_pump.run(item_extractor, args.dump_path, args.output_path)
@@ -76,16 +76,16 @@ def main(argv, filepath):
         return
 
     if 'item_analysis' == args.step:
-        whitelisted_ext_ids = storage.get(args.side_service_input_path)
+        allowed_ext_ids = storage.get(args.side_service_input_path)
         analysis_pipe = pipes.ItemStatisticalAnalysisPipe(
-            whitelisted_ext_ids,
+            allowed_ext_ids,
             config.get('minimum_repetitions_for_item_values'),
             config.get('maximum_noise_ratio_for_item_values')
         )
         observer_pump = pumps.ObserverPump(storage)
         observer_pump.run(analysis_pipe, args.input_path, '-')
         mapping = analysis_pipe.get_mapping()
-        matching_pipe = pipes.ItemMappingMatcherPipe(mapping, whitelisted_ext_ids)
+        matching_pipe = pipes.ItemMappingMatcherPipe(mapping, allowed_ext_ids)
         simple_pump.run(matching_pipe, args.input_path, args.output_path)
         return
 
